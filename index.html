@@ -1,263 +1,1687 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="dark">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Винил рядом</title>
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#12262e;--card:#1b3640;--ink:#f3ece0;--mute:#8fa8ad;--acc:#f0b43c;--acc-ink:#251a00;--line:#2b4a55;--bad:#ff8a7a;color-scheme:dark}
-@media (prefers-color-scheme:light){:root:not(.tg-dark){--bg:#f1ede4;--card:#fff;--ink:#1d2a2e;--mute:#6c7f83;--line:#ddd6c8;--acc-ink:#251a00;color-scheme:light}}
-*{box-sizing:border-box;margin:0}
-html,body{background:var(--bg);color:var(--ink);font:15px/1.4 "Bricolage Grotesque",system-ui,sans-serif}
-body{padding:0 14px calc(76px + env(safe-area-inset-bottom,0px));padding-top:env(safe-area-inset-top,0px);max-width:640px;margin:auto}
-h1{font-size:26px;font-weight:800;padding:16px 0 10px;letter-spacing:-.02em}
-h2{font-size:19px;font-weight:800;margin:0 0 6px}
-input,select,textarea,button{font:inherit;color:inherit}
-input,select,textarea{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
-input:focus,select:focus,textarea:focus,button:focus-visible{border-color:var(--acc);outline:2px solid var(--acc);outline-offset:1px}
-label{display:block;font-size:13px;color:var(--mute);margin:10px 0 4px}
-.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:10px;padding:11px 16px;font-weight:600;cursor:pointer}
-.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line)}
-.btn.bad{background:transparent;color:var(--bad);border:1px solid var(--bad)}
-.row{display:flex;gap:8px}.row>*{flex:1}
-.bar{display:flex;gap:8px;margin-bottom:12px}.bar input{flex:1}.bar .btn{flex:none}
-.card{display:flex;gap:12px;background:var(--card);border-radius:14px;padding:10px;margin-bottom:10px;cursor:pointer}
-.cov{width:76px;height:76px;flex:none;border-radius:8px;background:radial-gradient(circle,var(--bg) 0 8%,#000 9% 30%,#222 31% 33%,#000 34% 100%) center/cover;object-fit:cover}
-.big{width:100%;height:auto;aspect-ratio:1;border-radius:14px;margin-bottom:12px}
-.meta{color:var(--mute);font-size:13px}.price{font-weight:800;color:var(--acc);font-size:17px}
-.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:1px 9px;font-size:12px;margin:4px 4px 0 0}
-.tag.c{border-color:var(--acc);color:var(--acc)}
-nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
-nav button{flex:1;background:none;border:0;padding:14px 4px;color:var(--mute);font-weight:600;cursor:pointer}
-nav button.on{color:var(--acc);box-shadow:inset 0 2px var(--acc)}
-.empty{color:var(--mute);text-align:center;padding:32px 10px}
-.err{color:var(--bad);padding:10px 0}
-details{margin:0 0 12px}summary{cursor:pointer;color:var(--mute);padding:4px 0}
-ol.tr{padding-left:22px;color:var(--mute);font-size:14px}ol.tr li b{font-weight:400;color:var(--ink)}
-.sheet{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center;z-index:9}
-.sheet>div{background:var(--bg);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:18px 18px 0 0;padding:16px 14px calc(18px + env(safe-area-inset-bottom,0px))}
-.hide{display:none!important}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Винил Маркет — Маркетплейс пластинок</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        vinyl: {
+                            950: '#09090b',
+                            900: '#121216',
+                            800: '#1c1c22',
+                            700: '#272730',
+                            amber: '#f59e0b',
+                            gold: '#fbbf24'
+                        }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 92px;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .vinyl-grooves {
+            background: repeating-radial-gradient(
+                #111 0,
+                #111 2px,
+                #222 3px,
+                #111 4px
+            );
+        }
+        .glass-header {
+            background: rgba(18, 18, 22, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .glass-modal {
+            background: rgba(24, 24, 30, 0.96);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+    </style>
 </head>
-<body>
-<h1 id="ttl">Винил рядом</h1>
+<body class="min-h-screen select-none">
 
-<section id="v-search">
-  <form class="bar" id="sf"><input id="q" type="search" placeholder="Название, артист или код (r1234567, каталожный №)" enterkeyhint="search"><button class="btn">Найти</button></form>
-  <div id="sres"></div>
-</section>
+    <!-- ВЕРХНИЙ БАР (Telegram Mini App Header) -->
+    <header class="sticky top-0 z-30 glass-header border-b border-zinc-800/80 px-4 py-3">
+        <div class="max-w-2xl mx-auto">
+            <div class="flex items-center justify-between mb-3">
+                <div class="flex items-center gap-2.5" onclick="switchTab('market')" role="button">
+                    <div class="w-9 h-9 rounded-full vinyl-grooves border-2 border-amber-500/80 flex items-center justify-center shadow-lg shadow-amber-500/10 animate-spin-slow">
+                        <div class="w-3 h-3 rounded-full bg-amber-500 border border-black"></div>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-extrabold text-base tracking-tight text-white">ВИНИЛ<span class="text-amber-500">МАРКЕТ</span></span>
+                        </div>
+                        <p class="text-[11px] text-zinc-400 leading-none mt-0.5">Коллекционный маркетплейс пластинок</p>
+                    </div>
+                </div>
 
-<section id="v-market" class="hide">
-  <div class="bar"><input id="mq" type="search" placeholder="Поиск по объявлениям"><button class="btn alt" id="ftog">Фильтры</button></div>
-  <div id="flt" class="hide">
-    <div class="row"><div><label>Цена от</label><input id="pmin" type="number" min="0"></div><div><label>Цена до</label><input id="pmax" type="number" min="0"></div></div>
-    <div class="row"><div><label>Год от</label><input id="ymin" type="number"></div><div><label>Год до</label><input id="ymax" type="number"></div></div>
-    <div class="row"><div><label>Мин. состояние</label><select id="fcond"></select></div><div><label>Город</label><input id="fcity"></div></div>
-    <div class="row"><div><label>Жанр</label><input id="fgen"></div><div><label>Сортировка</label><select id="fsort"><option value="new">Сначала новые</option><option value="pa">Дешевле</option><option value="pd">Дороже</option><option value="y">По году</option></select></div></div>
-    <div style="height:12px"></div>
-  </div>
-  <div id="mres"></div>
-</section>
+                <!-- Кнопка API Токена и Профиль Telegram -->
+                <div class="flex items-center gap-2">
+                    <button onclick="openTokenModal()" id="tokenHeaderBtn" class="px-2.5 py-1.5 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 border border-zinc-700 text-xs font-medium text-amber-400 flex items-center gap-1.5 transition">
+                        <i class="fa-solid fa-key"></i>
+                        <span id="tokenStatusText">API Токен</span>
+                    </button>
+                    <div id="userBadge" onclick="switchTab('inquiries')" class="cursor-pointer flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 px-2.5 py-1.5 rounded-xl">
+                        <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                        <span id="tgUsernameDisplay" class="text-xs font-mono text-zinc-300">@collector</span>
+                    </div>
+                </div>
+            </div>
 
-<section id="v-mine" class="hide"><div id="mine"></div>
-  <details><summary>Настройки и токен Discogs</summary>
-    <label>Персональный токен Discogs</label><input id="tok" type="password" autocomplete="off" placeholder="Вставьте токен">
-    <p class="meta" style="margin:6px 0 10px">Получить: discogs.com → Settings → Developers → Generate new token. Токен хранится только на вашем устройстве.</p>
-    <div class="row"><button class="btn" id="savetok">Сохранить</button><button class="btn bad" id="deltok">Удалить токен</button></div>
-  </details>
-</section>
+            <!-- ГЛОБАЛЬНЫЙ ПОИСК (По названию, артисту, кат. номеру или ID релиза) -->
+            <div class="relative flex items-center gap-2">
+                <div class="relative flex-1">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
+                    <input 
+                        id="globalSearchInput" 
+                        type="text" 
+                        placeholder="Артист, альбом, кат. номер или ID релиза..." 
+                        class="w-full pl-9 pr-24 py-2.5 bg-zinc-900/90 border border-zinc-700/80 focus:border-amber-500 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none transition"
+                        oninput="handleSearchInput(this.value)"
+                        onkeydown="if(event.key === 'Enter') executeDiscogsSearch()"
+                    >
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-20 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 px-1.5">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </button>
+                    <button onclick="executeDiscogsSearch()" id="searchDiscogsBtn" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-1 rounded-lg text-xs transition">
+                        Найти
+                    </button>
+                </div>
 
-<nav><button data-v="search" class="on">Поиск</button><button data-v="market">Маркет</button><button data-v="mine">Мои</button></nav>
-<div id="sheet" class="sheet hide"><div id="sbody"></div></div>
+                <!-- Кнопка расширенных фильтров -->
+                <button onclick="toggleFilterDrawer()" id="filterBtn" class="relative p-2.5 rounded-xl bg-zinc-900 border border-zinc-700/80 text-zinc-300 hover:text-amber-400 hover:border-amber-500/50 transition">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span id="activeFiltersBadge" class="hidden absolute -top-1 -right-1 w-4 h-4 rounded-full bg-amber-500 text-black font-bold text-[10px] flex items-center justify-center">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
 
-<script>
-// ===== Настройки =====
-// Для общего маркета между пользователями укажите адрес вашего сервера (см. API ниже).
-// GET {B}/listings → [..]; POST {B}/listings; DELETE {B}/listings/:id. Заголовок X-Init-Data = Telegram initData для проверки.
-const BACKEND_URL = "";
-const COND = ["M","NM","VG+","VG","G+","G","F","P"];
-const COND_NAME = {M:"Mint",NM:"Near Mint","VG+":"Very Good Plus",VG:"Very Good","G+":"Good Plus",G:"Good",F:"Fair",P:"Poor"};
-const API = "https://api.discogs.com";
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <main class="max-w-2xl mx-auto px-4 pt-3">
 
-const tg = window.Telegram && Telegram.WebApp;
-if (tg){ tg.ready(); tg.expand(); if(tg.colorScheme==="dark") document.documentElement.classList.add("tg-dark"); }
-const me = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) || null;
-const $ = s => document.querySelector(s);
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+        <!-- Уведомление об отсутствии API Токена Discogs -->
+        <div id="missingTokenBanner" class="mb-4 p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-zinc-900 to-zinc-900 border border-amber-500/40 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+                    <i class="fa-solid fa-key"></i>
+                </div>
+                <div>
+                    <h4 class="text-xs font-bold text-white">Подключите ваш Discogs API Токен</h4>
+                    <p class="text-[11px] text-zinc-400">Для поиска любых пластинок, обложек и прессов из базы Discogs введите ваш персональный токен.</p>
+                </div>
+            </div>
+            <button onclick="openTokenModal()" class="shrink-0 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition">
+                Ввести токен
+            </button>
+        </div>
 
-// ===== Хранилище (токен и мои объявления) =====
-const store = {
-  get(k){ return new Promise(r=>{ try{ if(tg&&tg.CloudStorage){ tg.CloudStorage.getItem(k,(e,v)=>r(e?localStorage.getItem(k):v||localStorage.getItem(k))); return; } }catch(e){} r(localStorage.getItem(k)); }); },
-  set(k,v){ try{localStorage.setItem(k,v)}catch(e){} try{ tg&&tg.CloudStorage&&tg.CloudStorage.setItem(k,v); }catch(e){} },
-  del(k){ try{localStorage.removeItem(k)}catch(e){} try{ tg&&tg.CloudStorage&&tg.CloudStorage.removeItem(k); }catch(e){} }
-};
-let token = "", mine = [], all = [];
+        <!-- ========================================== -->
+        <!-- ВКЛАДКА 1: МАРКЕТ И ПОИСК РЕЛИЗОВ          -->
+        <!-- ========================================== -->
+        <section id="tab-market" class="space-y-4">
 
-// ===== Discogs =====
-async function dg(path, params={}){
-  if(!token) throw new Error("Добавьте токен Discogs: вкладка «Мои» → Настройки.");
-  const u = new URL(API+path); Object.entries(params).forEach(([k,v])=>u.searchParams.set(k,v)); u.searchParams.set("token",token);
-  const r = await fetch(u);
-  if(r.status===401) throw new Error("Токен не подошёл. Проверьте его в настройках.");
-  if(r.status===404) throw new Error("Ничего не найдено по этому коду.");
-  if(r.status===429) throw new Error("Слишком много запросов. Подождите минуту.");
-  if(!r.ok) throw new Error("Ошибка Discogs: "+r.status);
-  return r.json();
-}
-function parseCode(s){
-  s = s.trim(); let m = s.match(/discogs\.com\/.*?release\/(\d+)/i) || s.match(/^\[?r(\d+)\]?$/i) || s.match(/^(\d{3,})$/);
-  return m ? m[1] : null;
-}
-async function search(){
-  const q = $("#q").value.trim(); if(!q) return;
-  const box = $("#sres"); box.innerHTML = '<p class="empty">Ищу…</p>';
-  try{
-    const id = parseCode(q);
-    if(id){ box.innerHTML=""; return openRelease(id); }
-    const d = await dg("/database/search",{q, type:"release", per_page:25});
-    if(!d.results.length){ box.innerHTML='<p class="empty">Ничего не нашлось. Попробуйте другое название или каталожный номер.</p>'; return; }
-    box.innerHTML = d.results.map(r=>`<div class="card" data-id="${r.id}"><img class="cov" loading="lazy" src="${esc(r.thumb)}" alt="" onerror="this.removeAttribute('src')"><div><b>${esc(r.title)}</b><div class="meta">${esc([r.year,r.country,(r.format||[]).join(", ")].filter(Boolean).join(" · "))}</div><div class="meta">${esc([(r.label||[])[0],r.catno].filter(Boolean).join(" · "))}</div></div></div>`).join("");
-    box.querySelectorAll(".card").forEach(c=>c.onclick=()=>openRelease(c.dataset.id));
-  }catch(e){ box.innerHTML=`<p class="err">${esc(e.message)}</p>`; }
-}
-async function openRelease(id){
-  openSheet('<p class="empty">Загружаю…</p>');
-  try{
-    const r = await dg("/releases/"+id);
-    const img = (r.images||[]).find(i=>i.type==="primary")||(r.images||[])[0];
-    const art = (r.artists||[]).map(a=>a.name.replace(/\s\(\d+\)$/,"")).join(", ");
-    const lab = (r.labels||[]).map(l=>l.name+(l.catno?" ("+l.catno+")":"")).join(", ");
-    const fmt = (r.formats||[]).map(f=>[f.name,...(f.descriptions||[])].join(", ")).join("; ");
-    const info = {releaseId:r.id,artist:art,title:r.title,year:r.year||0,country:r.country||"",label:lab,genre:(r.genres||[]).join(", "),styles:(r.styles||[]).join(", "),format:fmt,cover:(img&&(img.uri150||img.resource_url))||r.thumbnail||""};
-    const listed = all.filter(l=>l.releaseId===r.id);
-    $("#sbody").innerHTML = `
-      ${img?`<img class="cov big" src="${esc(img.uri||img.resource_url)}" alt="">`:""}
-      <h2>${esc(art)} — ${esc(r.title)}</h2>
-      <div class="meta">${esc([r.year,r.country,fmt].filter(Boolean).join(" · "))}</div>
-      <div class="meta">${esc(lab)}</div>
-      <div>${[...(r.genres||[]),...(r.styles||[])].map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
-      <p class="meta" style="margin-top:8px">В коллекциях: ${r.community?.have??"—"} · В вишлистах: ${r.community?.want??"—"}${r.lowest_price?` · Минимум на Discogs: $${r.lowest_price}`:""}</p>
-      ${r.notes?`<details><summary>Заметки</summary><p class="meta" style="white-space:pre-wrap">${esc(r.notes.slice(0,800))}</p></details>`:""}
-      ${(r.tracklist||[]).length?`<details open><summary>Треклист</summary><ol class="tr">${r.tracklist.filter(t=>t.title).map(t=>`<li><b>${esc((t.position?t.position+" ":"")+t.title)}</b> ${esc(t.duration||"")}</li>`).join("")}</ol></details>`:""}
-      <p class="meta">Идентификаторы: ${esc((r.identifiers||[]).slice(0,4).map(i=>i.value).join(" · ")||"—")}</p>
-      <h2 style="margin-top:14px">Объявления (${listed.length})</h2>
-      <div id="rl">${listed.map(cardHtml).join("")||'<p class="empty">Пока никто не продаёт эту пластинку.</p>'}</div>
-      <div class="row" style="margin-top:8px"><button class="btn" id="sellb">Продать эту пластинку</button><button class="btn alt" id="clb">Закрыть</button></div>`;
-    bindCards($("#rl"));
-    $("#sellb").onclick = ()=>sellForm(info);
-    $("#clb").onclick = closeSheet;
-  }catch(e){ $("#sbody").innerHTML=`<p class="err">${esc(e.message)}</p><button class="btn alt" onclick="closeSheet()">Закрыть</button>`; }
-}
+            <!-- Переключатель режима: Пластинки в продаже VS Результаты поиска Discogs -->
+            <div class="grid grid-cols-2 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl">
+                <button id="modeListingsBtn" onclick="setMarketViewMode('listings')" class="py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black shadow transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-tags"></i>
+                    <span>В продаже (<span id="listingsCountBadge">0</span>)</span>
+                </button>
+                <button id="modeReleasesBtn" onclick="setMarketViewMode('releases')" class="py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-compact-disc"></i>
+                    <span>Каталог Discogs (<span id="releasesCountBadge">0</span>)</span>
+                </button>
+            </div>
 
-// ===== Объявления =====
-const cur = {RUB:"₽",USD:"$",EUR:"€",KZT:"₸",BYN:"Br"};
-function cardHtml(l){
-  return `<div class="card" data-l="${esc(l.id)}"><img class="cov" loading="lazy" src="${esc(l.cover)}" alt="" onerror="this.removeAttribute('src')"><div style="min-width:0"><b>${esc(l.artist)} — ${esc(l.title)}</b><div class="meta">${esc([l.year||"",l.country,l.city].filter(Boolean).join(" · "))}</div><div><span class="tag c">${esc(l.media)}${l.sleeve?" / "+esc(l.sleeve):""}</span></div><div class="price">${esc(l.price)} ${cur[l.cur]||esc(l.cur)}</div></div></div>`;
-}
-function bindCards(root){ root.querySelectorAll("[data-l]").forEach(c=>c.onclick=()=>listingView(c.dataset.l)); }
-function find(id){ return all.find(l=>l.id===id)||mine.find(l=>l.id===id); }
-function listingView(id){
-  const l = find(id); if(!l) return;
-  const own = me && l.sellerId===me.id || mine.some(m=>m.id===id);
-  openSheet(`
-    <img class="cov big" src="${esc(l.cover)}" alt="" onerror="this.removeAttribute('src')">
-    <h2>${esc(l.artist)} — ${esc(l.title)}</h2>
-    <div class="price" style="font-size:22px">${esc(l.price)} ${cur[l.cur]||esc(l.cur)}</div>
-    <p class="meta">${esc([l.year,l.country,l.label,l.format].filter(Boolean).join(" · "))}</p>
-    <div><span class="tag c">Диск: ${esc(l.media)} (${COND_NAME[l.media]||""})</span>${l.sleeve?`<span class="tag c">Конверт: ${esc(l.sleeve)}</span>`:""}${l.city?`<span class="tag">${esc(l.city)}</span>`:""}${l.genre?`<span class="tag">${esc(l.genre)}</span>`:""}</div>
-    ${l.note?`<p style="margin-top:10px;white-space:pre-wrap">${esc(l.note)}</p>`:""}
-    <p class="meta" style="margin-top:10px">Продавец: ${esc(l.sellerName||"—")}</p>
-    <div class="row" style="margin-top:12px">
-      ${own?`<button class="btn bad" id="dl">Снять с продажи</button>`:`<button class="btn" id="cs">Сообщить продавцу</button>`}
-      <button class="btn alt" id="rel">О пластинке</button><button class="btn alt" id="clb">Закрыть</button>
-    </div>`);
-  $("#clb").onclick = closeSheet; $("#rel").onclick = ()=>openRelease(l.releaseId);
-  if($("#cs")) $("#cs").onclick = ()=>contact(l);
-  if($("#dl")) $("#dl").onclick = ()=>removeListing(l);
-}
-function contact(l){
-  if(!l.sellerUsername){ alert("У продавца нет публичного @username в Telegram — написать ему не получится."); return; }
-  const text = encodeURIComponent(`Здравствуйте! Интересует пластинка: ${l.artist} — ${l.title} (${l.year||"?"}, ${l.media}), ${l.price} ${l.cur}. Ещё продаёте?`);
-  const url = `https://t.me/${l.sellerUsername}?text=${text}`;
-  tg&&tg.openTelegramLink ? tg.openTelegramLink(url) : window.open(url,"_blank");
-}
-function sellForm(info){
-  if(!me){ alert("Откройте приложение внутри Telegram, чтобы размещать объявления."); return; }
-  const opts = COND.map(c=>`<option>${c}</option>`).join("");
-  $("#sbody").innerHTML = `<h2>${esc(info.artist)} — ${esc(info.title)}</h2>
-    <div class="row"><div><label>Цена</label><input id="fp" type="number" min="0" inputmode="decimal"></div><div><label>Валюта</label><select id="fc"><option>RUB</option><option>USD</option><option>EUR</option><option>KZT</option><option>BYN</option></select></div></div>
-    <div class="row"><div><label>Состояние диска</label><select id="fm">${opts}</select></div><div><label>Состояние конверта</label><select id="fs"><option value="">—</option>${opts}</select></div></div>
-    <label>Город</label><input id="fci" placeholder="Например, Москва">
-    <label>Год выпуска (если у вас другой пресс)</label><input id="fy" type="number" value="${info.year||""}">
-    <label>Комментарий (пресс, матрицы, доставка)</label><textarea id="fn" rows="3"></textarea>
-    ${me.username?"":'<p class="err">В вашем профиле нет @username — покупатели не смогут написать вам. Задайте его в настройках Telegram.</p>'}
-    <div class="row" style="margin-top:12px"><button class="btn" id="pub">Опубликовать</button><button class="btn alt" id="cn">Отмена</button></div>`;
-  $("#cn").onclick = closeSheet;
-  $("#pub").onclick = async ()=>{
-    const price = parseFloat($("#fp").value); if(!(price>0)){ alert("Укажите цену."); return; }
-    const l = {...info, id:"l"+Date.now().toString(36)+Math.random().toString(36).slice(2,6), price, cur:$("#fc").value, media:$("#fm").value, sleeve:$("#fs").value, city:$("#fci").value.trim(), year:parseInt($("#fy").value)||info.year, note:$("#fn").value.trim(), sellerId:me.id, sellerName:[me.first_name,me.last_name].filter(Boolean).join(" "), sellerUsername:me.username||"", ts:Date.now()};
-    try{
-      if(BACKEND_URL){ const r = await fetch(BACKEND_URL+"/listings",{method:"POST",headers:{"Content-Type":"application/json","X-Init-Data":tg.initData||""},body:JSON.stringify(l)}); if(!r.ok) throw 0; }
-      mine.unshift(l); store.set("mine",JSON.stringify(mine)); await loadAll(); closeSheet(); show("mine");
-    }catch(e){ alert("Не удалось опубликовать. Проверьте соединение."); }
-  };
-}
-async function removeListing(l){
-  if(!confirm("Снять объявление с продажи?")) return;
-  try{ if(BACKEND_URL) await fetch(BACKEND_URL+"/listings/"+l.id,{method:"DELETE",headers:{"X-Init-Data":tg.initData||""}}); }catch(e){}
-  mine = mine.filter(m=>m.id!==l.id); store.set("mine",JSON.stringify(mine)); await loadAll(); closeSheet(); renderMine(); renderMarket();
-}
-async function loadAll(){
-  if(BACKEND_URL){ try{ all = await (await fetch(BACKEND_URL+"/listings")).json(); }catch(e){ all = mine.slice(); } }
-  else all = mine.slice();
-}
+            <!-- Сортировка и статус фильтрации -->
+            <div class="flex items-center justify-between text-xs text-zinc-400 px-1">
+                <div id="activeFilterSummary" class="truncate max-w-[60%]">Актуальные объявления продавцов</div>
+                <div class="flex items-center gap-1.5">
+                    <span class="text-zinc-500">Сорт.:</span>
+                    <select id="sortSelect" onchange="renderCurrentMarketView()" class="bg-zinc-900 border border-zinc-800 rounded-lg px-2 py-1 text-xs text-zinc-200 focus:outline-none focus:border-amber-500">
+                        <option value="newest">Сначала новые</option>
+                        <option value="price_asc">Дешевле (₽)</option>
+                        <option value="price_desc">Дороже (₽)</option>
+                        <option value="condition">Лучшее состояние (M/NM)</option>
+                        <option value="year_asc">По году выпуска</option>
+                    </select>
+                </div>
+            </div>
 
-// ===== Маркет и фильтры =====
-function renderMarket(){
-  const q = $("#mq").value.toLowerCase().trim(), n = id=>parseFloat($(id).value);
-  const pmin=n("#pmin"),pmax=n("#pmax"),ymin=n("#ymin"),ymax=n("#ymax"),fc=$("#fcond").value,city=$("#fcity").value.toLowerCase().trim(),gen=$("#fgen").value.toLowerCase().trim();
-  let a = all.filter(l=>
-    (!q || (l.artist+" "+l.title+" "+l.label+" "+l.note).toLowerCase().includes(q)) &&
-    (isNaN(pmin)||l.price>=pmin) && (isNaN(pmax)||l.price<=pmax) &&
-    (isNaN(ymin)||l.year>=ymin) && (isNaN(ymax)||l.year<=ymax) &&
-    (!fc || COND.indexOf(l.media)<=COND.indexOf(fc)) &&
-    (!city || (l.city||"").toLowerCase().includes(city)) &&
-    (!gen || ((l.genre||"")+" "+(l.styles||"")).toLowerCase().includes(gen)));
-  const s = $("#fsort").value;
-  a.sort(s==="pa"?(x,y)=>x.price-y.price : s==="pd"?(x,y)=>y.price-x.price : s==="y"?(x,y)=>x.year-y.year : (x,y)=>y.ts-x.ts);
-  $("#mres").innerHTML = a.length ? a.map(cardHtml).join("") : `<p class="empty">${all.length?"По фильтрам ничего нет. Ослабьте условия.":"Объявлений пока нет. Найдите пластинку и нажмите «Продать»."}</p>`;
-  bindCards($("#mres"));
-}
-function renderMine(){
-  $("#mine").innerHTML = (mine.length ? mine.map(cardHtml).join("") : '<p class="empty">У вас нет объявлений. Найдите пластинку во вкладке «Поиск» и нажмите «Продать эту пластинку».</p>');
-  bindCards($("#mine"));
-}
+            <!-- Индикатор загрузки из Discogs API -->
+            <div id="searchLoadingState" class="hidden p-8 rounded-2xl bg-zinc-900/70 border border-zinc-800 text-center space-y-2">
+                <i class="fa-solid fa-compact-disc fa-spin text-2xl text-amber-500"></i>
+                <p class="text-xs text-zinc-300 font-medium">Запрашиваем данные из официальной базы Discogs...</p>
+            </div>
 
-// ===== UI =====
-function openSheet(h){ $("#sbody").innerHTML=h; $("#sheet").classList.remove("hide"); document.body.style.overflow="hidden"; }
-function closeSheet(){ $("#sheet").classList.add("hide"); document.body.style.overflow=""; }
-$("#sheet").onclick = e=>{ if(e.target.id==="sheet") closeSheet(); };
-function show(v){
-  document.querySelectorAll("section").forEach(s=>s.classList.toggle("hide",s.id!=="v-"+v));
-  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on",b.dataset.v===v));
-  if(v==="market") renderMarket(); if(v==="mine") renderMine();
-}
-document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>show(b.dataset.v));
-$("#sf").onsubmit = e=>{ e.preventDefault(); search(); };
-$("#ftog").onclick = ()=>$("#flt").classList.toggle("hide");
-["mq","pmin","pmax","ymin","ymax","fcond","fcity","fgen","fsort"].forEach(i=>$("#"+i).addEventListener("input",renderMarket));
-$("#fcond").innerHTML = '<option value="">Любое</option>'+COND.map(c=>`<option>${c}</option>`).join("");
-$("#savetok").onclick = ()=>{ const t=$("#tok").value.trim(); if(!t) return; token=t; store.set("dgtoken",t); $("#tok").value=""; alert("Токен сохранён."); show("search"); };
-$("#deltok").onclick = ()=>{ token=""; store.del("dgtoken"); alert("Токен удалён."); };
+            <!-- СПИСОК ЛОТОВ ИЛИ НАЙДЕННЫХ РЕЛИЗОВ -->
+            <div id="marketContentContainer" class="space-y-3 pb-6"></div>
+        </section>
 
-(async()=>{
-  token = (await store.get("dgtoken"))||"";
-  try{ mine = JSON.parse((await store.get("mine"))||"[]"); }catch(e){ mine=[]; }
-  await loadAll();
-  if(!token){ show("mine"); document.querySelector("details").open = true; $("#tok").focus(); }
-})();
-</script>
+        <!-- ========================================== -->
+        <!-- ВКЛАДКА 2: ПРОДАТЬ ПЛАСТИНКУ (ЛИСТИНГ)     -->
+        <!-- ========================================== -->
+        <section id="tab-sell" class="hidden space-y-5 pb-8">
+            <div class="p-4 rounded-2xl bg-gradient-to-br from-zinc-900 via-zinc-900 to-amber-950/30 border border-zinc-800">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-plus-circle text-amber-500"></i>
+                    <span>Выставить пластинку на продажу</span>
+                </h2>
+                <p class="text-xs text-zinc-400 mt-1">Введите код релиза или название пластинки для автозаполнения данных из базы Discogs, затем укажите вашу цену, состояние и контакты.</p>
+
+                <!-- Автозаполнение по Discogs API -->
+                <div class="mt-4 pt-3 border-t border-zinc-800/80">
+                    <label class="block text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
+                        Автозаполнение по базе Discogs
+                    </label>
+                    <div class="flex gap-2">
+                        <input 
+                            id="sellDiscogsLookupInput" 
+                            type="text" 
+                            placeholder="ID релиза Discogs или исполнитель / альбом..." 
+                            class="flex-1 px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-700 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500"
+                            onkeydown="if(event.key === 'Enter'){ event.preventDefault(); autofillSellFormFromDiscogs(); }"
+                        >
+                        <button type="button" onclick="autofillSellFormFromDiscogs()" id="sellAutofillBtn" class="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs shrink-0 transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            <span>Заполнить</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ФОРМА ПРОДАЖИ -->
+            <form id="sellVinylForm" onsubmit="submitVinylListing(event)" class="space-y-4">
+                <!-- Инфо о пластинке -->
+                <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Паспорт издания</h3>
+                        <span id="sellSelectedDiscogsBadge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-400">Не привязан к ID</span>
+                    </div>
+
+                    <div class="flex gap-3 items-start">
+                        <img id="sellPreviewCover" src="https://placehold.co/300x300/18181b/f59e0b?text=VINYL" alt="Cover" class="w-20 h-20 rounded-xl object-cover border border-zinc-700 shrink-0">
+                        <div class="flex-1 space-y-2">
+                            <input id="sellArtist" required type="text" placeholder="Исполнитель" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-white focus:border-amber-500 focus:outline-none">
+                            <input id="sellTitle" required type="text" placeholder="Название альбома" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-sm text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Лейбл</label>
+                            <input id="sellLabel" required type="text" placeholder="Название лейбла" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Каталожный номер (Cat#)</label>
+                            <input id="sellCatno" required type="text" placeholder="Кат. номер" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs font-mono text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Год выпуска</label>
+                            <input id="sellYear" required type="number" min="1930" max="2027" placeholder="Год издания" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Страна издания</label>
+                            <input id="sellCountry" required type="text" placeholder="Страна (напр. USSR, UK, Japan)" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Тип пресса</label>
+                            <select id="sellPressType" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                <option value="Оригинал (1st Press)">Оригинал (1st Press)</option>
+                                <option value="Раннее переиздание (Repress)">Раннее переиздание</option>
+                                <option value="Аудиофильский ремастер">Аудиофильский ремастер</option>
+                                <option value="Японский пресс (Japan)">Японский пресс (Japan)</option>
+                                <option value="Переиздание (Reissue)">Переиздание (Reissue)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-zinc-400 block mb-1">Ссылка на обложку (URL)</label>
+                            <input id="sellCoverUrl" type="url" placeholder="https://..." oninput="if(this.value) document.getElementById('sellPreviewCover').src = this.value" class="w-full px-3 py-2 rounded-lg bg-zinc-950 border border-zinc-800 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Оценка состояния по стандарту Goldmine -->
+                <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Состояние экземпляра (Goldmine Standard)</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1.5">Состояние винила (Media)</label>
+                            <select id="sellMediaCond" class="w-full px-3 py-2.5 rounded-xl bg-zinc-950 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                <option value="M">M (Mint) — Запечатана / Идеал</option>
+                                <option value="NM" selected>NM (Near Mint) — Открыта, без следов</option>
+                                <option value="VG+">VG+ (Very Good Plus) — Лёгкие следы</option>
+                                <option value="VG">VG (Very Good) — Слышен песочек</option>
+                                <option value="G">G (Good) — Сильный износ</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1.5">Состояние конверта (Sleeve)</label>
+                            <select id="sellSleeveCond" class="w-full px-3 py-2.5 rounded-xl bg-zinc-950 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none">
+                                <option value="M">M (Mint) — В заводской плёнке</option>
+                                <option value="NM">NM (Near Mint) — Как новый</option>
+                                <option value="VG+" selected>VG+ (Very Good Plus) — Минимальный износ</option>
+                                <option value="VG">VG (Very Good) — Потёртости</option>
+                                <option value="Generic">Generic — Технический конверт</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Особенности и комплектация -->
+                    <div>
+                        <label class="text-xs text-zinc-300 font-medium block mb-2">Комплектация и особенности</label>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <label class="flex items-center gap-2 p-2 rounded-lg bg-zinc-950 border border-zinc-800 cursor-pointer">
+                                <input type="checkbox" id="featUltrasonic" class="accent-amber-500 rounded">
+                                <span>Ультразвуковая мойка</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg bg-zinc-950 border border-zinc-800 cursor-pointer">
+                                <input type="checkbox" id="featInsert" class="accent-amber-500 rounded">
+                                <span>Оригинальная вкладка</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg bg-zinc-950 border border-zinc-800 cursor-pointer">
+                                <input type="checkbox" id="featObi" class="accent-amber-500 rounded">
+                                <span>Японская OBI-лента</span>
+                            </label>
+                            <label class="flex items-center gap-2 p-2 rounded-lg bg-zinc-950 border border-zinc-800 cursor-pointer">
+                                <input type="checkbox" id="featSealed" class="accent-amber-500 rounded">
+                                <span>Заводской силд (Sealed)</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Цена, Локация и Контакт Telegram -->
+                <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-zinc-400">Цена, город и связь в Telegram</h3>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1">Ваша цена в рублях (₽)</label>
+                            <input id="sellPrice" required type="number" min="50" step="50" placeholder="Укажите цену" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-amber-500/50 text-base font-bold text-amber-400 focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1">Город продавца</label>
+                            <input id="sellCity" required type="text" placeholder="Например: Москва" class="w-full px-3 py-2.5 rounded-xl bg-zinc-950 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1">Ваш Telegram (@username)</label>
+                            <input id="sellTelegramUser" required type="text" placeholder="username без @" class="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-700 text-xs font-mono text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-xs text-zinc-300 font-medium block mb-1">Способы доставки</label>
+                            <input id="sellShipping" required type="text" value="СДЭК, Почта, Авито, Лично" class="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="text-xs text-zinc-300 font-medium block mb-1">Описание состояния и матриц</label>
+                        <textarea id="sellComment" rows="2" required placeholder="Опишите состояние винила, звук, наличие вкладки и особенности упаковки..." class="w-full px-3 py-2 rounded-xl bg-zinc-950 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-black font-extrabold text-sm shadow-lg shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-check-double"></i>
+                    <span>Опубликовать пластинку на продажу</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ВКЛАДКА 3: КОЛЛЕКЦИЯ И WANTLIST            -->
+        <!-- ========================================== -->
+        <section id="tab-collection" class="hidden space-y-4 pb-8">
+            <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-between">
+                <div>
+                    <h2 class="text-base font-bold text-white">Моя коллекция и Wantlist</h2>
+                    <p class="text-xs text-zinc-400">Сохранённые релизы из базы Discogs</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 p-1 bg-zinc-900 border border-zinc-800 rounded-xl">
+                <button id="colSubBtnHave" onclick="switchCollectionSubTab('have')" class="py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black transition">
+                    В коллекции (<span id="colHaveCount">0</span>)
+                </button>
+                <button id="colSubBtnWant" onclick="switchCollectionSubTab('want')" class="py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition">
+                    Wantlist / Ищу (<span id="colWantCount">0</span>)
+                </button>
+            </div>
+
+            <div id="collectionListContainer" class="space-y-3"></div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- ВКЛАДКА 4: ЗАЯВКИ ПОКУПАТЕЛЕЙ (ЛС ТЕЛЕГРАМ)-->
+        <!-- ========================================== -->
+        <section id="tab-inquiries" class="hidden space-y-4 pb-8">
+            <div class="p-4 rounded-2xl bg-gradient-to-r from-zinc-900 via-zinc-900 to-emerald-950/30 border border-zinc-800">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <i class="fa-brands fa-telegram text-sky-400 text-xl"></i>
+                        <span>Запросы на покупку и связь в ЛС</span>
+                    </h2>
+                    <span class="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">Прямая связь</span>
+                </div>
+                <p class="text-xs text-zinc-400 mt-1">
+                    Когда покупатель нажимает <b>«Сообщить продавцу»</b>, здесь появляется заявка с его ником Telegram, чтобы продавец мог сразу написать ему в личные сообщения.
+                </p>
+            </div>
+
+            <div id="inquiriesContainer" class="space-y-3"></div>
+        </section>
+
+    </main>
+
+    <!-- ===================================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО 1: ПОЛНАЯ КАРТОЧКА РЕЛИЗА DISCOGS       -->
+    <!-- ===================================================== -->
+    <div id="releaseModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/80 backdrop-blur-md">
+        <div class="min-h-screen px-3 py-6 flex items-center justify-center">
+            <div class="w-full max-w-xl rounded-3xl glass-modal border border-zinc-700/80 shadow-2xl overflow-hidden">
+                <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-950/60">
+                    <div class="flex items-center gap-2">
+                        <span id="modalReleaseDiscogsCode" class="font-mono text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 font-semibold">ID</span>
+                        <span id="modalReleaseCountryYear" class="text-xs text-zinc-400">Страна • Год</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="copyDiscogsCodeFromModal()" class="px-2.5 py-1 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs text-zinc-300 flex items-center gap-1">
+                            <i class="fa-regular fa-copy"></i>
+                            <span>ID</span>
+                        </button>
+                        <button onclick="closeReleaseModal()" class="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 flex items-center justify-center">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Тело карточки релиза -->
+                <div id="releaseModalBody" class="p-4 space-y-5 max-h-[82vh] overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО 2: СООБЩИТЬ ПРОДАВЦУ / СВЯЗЬ В TELEGRAM -->
+    <!-- ===================================================== -->
+    <div id="contactSellerModal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4">
+        <div class="w-full max-w-lg rounded-t-3xl sm:rounded-3xl glass-modal border-t sm:border border-zinc-700 p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400">
+                        <i class="fa-brands fa-telegram text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-white">Сообщить продавцу о покупке</h3>
+                        <p class="text-[11px] text-zinc-400">Продавец получит ваш контакт и сможет написать вам в ЛС</p>
+                    </div>
+                </div>
+                <button onclick="closeContactSellerModal()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 hover:text-white flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Сводка по выбранному лоту -->
+            <div id="contactModalLotSummary" class="p-3 rounded-2xl bg-zinc-950/90 border border-zinc-800 flex items-center gap-3"></div>
+
+            <!-- Данные покупателя и сообщение продавцу -->
+            <div class="space-y-2.5">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[11px] text-zinc-400 block mb-1">Ваш @username в Telegram</label>
+                        <input id="buyerTgInput" type="text" placeholder="username" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs font-mono text-white focus:border-amber-500 focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[11px] text-zinc-400 block mb-1">Способ получения</label>
+                        <select id="buyerDeliverySelect" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none">
+                            <option value="СДЭК до ПВЗ">СДЭК до ПВЗ</option>
+                            <option value="Авито Доставка">Авито Доставка</option>
+                            <option value="Личная встреча">Личная встреча</option>
+                            <option value="Яндекс / Почта РФ">Яндекс / Почта РФ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-[11px] text-zinc-400 block mb-1">Сообщение для продавца</label>
+                    <textarea id="buyerMessageText" rows="3" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white focus:border-amber-500 focus:outline-none"></textarea>
+                </div>
+            </div>
+
+            <div class="space-y-2 pt-1">
+                <button onclick="sendSellerInquiryNotification()" class="w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+                    <i class="fa-solid fa-bell"></i>
+                    <span>Сообщить продавцу (Чтоб написал мне в ЛС)</span>
+                </button>
+
+                <button onclick="openDirectTelegramChatWithSeller()" class="w-full py-3 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 font-bold text-xs transition flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-telegram text-base"></i>
+                    <span>Открыть диалог с продавцом в Telegram ЛС</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО 3: РАСШИРЕННЫЕ ФИЛЬТРЫ                  -->
+    <!-- ===================================================== -->
+    <div id="filterDrawerModal" class="fixed inset-0 z-50 hidden flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="w-full max-w-lg rounded-t-3xl sm:rounded-3xl glass-modal border-t sm:border border-zinc-700 p-5 space-y-4">
+            <div class="flex items-center justify-between border-b border-zinc-800 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-amber-500"></i>
+                    <span>Фильтры пластинок</span>
+                </h3>
+                <button onclick="toggleFilterDrawer()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3.5 max-h-[65vh] overflow-y-auto pr-1">
+                <div>
+                    <label class="text-xs text-zinc-400 block mb-1.5">Минимальное состояние пластинки (Media)</label>
+                    <select id="filterMediaSelect" class="w-full px-3 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white">
+                        <option value="all">Любое состояние (M, NM, VG+, VG, G)</option>
+                        <option value="M">Только Mint (M)</option>
+                        <option value="NM">Не ниже Near Mint (NM и M)</option>
+                        <option value="VG+">Не ниже Very Good Plus (VG+, NM, M)</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-zinc-400 block mb-1.5">Город продавца</label>
+                        <input id="filterCityInput" type="text" placeholder="Все города (напр. Москва)" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-zinc-400 block mb-1.5">Тип издания</label>
+                        <select id="filterPressSelect" class="w-full px-3 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white">
+                            <option value="all">Все типы прессов</option>
+                            <option value="Оригинал">Только 1st Press / Оригинал</option>
+                            <option value="Японский">Японские прессы</option>
+                            <option value="переиздание">Переиздания / Ремастеры</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-zinc-400 block mb-1.5">Максимальная цена (₽)</label>
+                        <input id="filterMaxPrice" type="number" step="500" placeholder="Без лимита" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white">
+                    </div>
+                    <div>
+                        <label class="text-xs text-zinc-400 block mb-1.5">Год выпуска (от)</label>
+                        <input id="filterMinYear" type="number" placeholder="Любой год" class="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-xs text-white">
+                    </div>
+                </div>
+
+                <label class="flex items-center gap-2.5 p-3 rounded-xl bg-zinc-900 border border-zinc-800 cursor-pointer text-xs text-zinc-200">
+                    <input type="checkbox" id="filterUltrasonicOnly" class="accent-amber-500 rounded">
+                    <span>Только с ультразвуковой мойкой</span>
+                </label>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-zinc-800">
+                <button onclick="resetAllFilters()" class="py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold">
+                    Сбросить
+                </button>
+                <button onclick="applyAdvancedFilters()" class="py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-xs font-extrabold">
+                    Применить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- МОДАЛЬНОЕ ОКНО 4: НАСТРОЙКА ТОКЕНА DISCOGS API         -->
+    <!-- ===================================================== -->
+    <div id="discogsTokenModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="w-full max-w-md rounded-3xl glass-modal border border-zinc-700 p-5 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-500"></i>
+                    <span>Персональный токен Discogs API</span>
+                </h3>
+                <button onclick="closeTokenModal()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="text-xs text-zinc-400 space-y-2 leading-relaxed">
+                <p>Чтобы искать любые пластинки по названию, каталожному номеру или коду релиза напрямую через базу Discogs, укажите свой <b>Personal Access Token</b>.</p>
+                <div class="p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-[11px] text-zinc-300 space-y-1">
+                    <div class="font-semibold text-amber-400">Как получить токен за 30 секунд:</div>
+                    <div>1. Откройте <a href="https://www.discogs.com/settings/developers" target="_blank" class="underline text-sky-400">discogs.com/settings/developers</a></div>
+                    <div>2. Нажмите кнопку <b>«Generate new token»</b></div>
+                    <div>3. Скопируйте строку токена и вставьте ниже.</div>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[11px] text-zinc-400 block">Ваш Discogs Personal Access Token</label>
+                <input id="discogsTokenInput" type="password" placeholder="Вставьте токен Discogs..." class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-950 border border-zinc-700 text-sm font-mono text-white focus:border-amber-500 focus:outline-none">
+            </div>
+
+            <div class="flex gap-2 pt-1">
+                <button onclick="clearDiscogsToken()" class="px-3.5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-semibold">
+                    Очистить
+                </button>
+                <button onclick="saveDiscogsToken()" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs">
+                    Сохранить токен
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ВСПЛЫВАЮЩИЙ ТОСТ (ЗАМЕНА ALERT) -->
+    <div id="toastNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-[60] hidden max-w-sm w-[92%] px-4 py-3 rounded-2xl bg-zinc-900/95 border border-amber-500/60 shadow-2xl text-xs text-white flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-amber-400 text-base"></i>
+        <span id="toastText" class="flex-1 font-medium">Уведомление</span>
+    </div>
+
+    <!-- НИЖНЯЯ НАВИГАЦИЯ TELEGRAM MINI APP -->
+    <nav class="fixed bottom-0 left-0 right-0 z-40 glass-header border-t border-zinc-800/90 px-2 py-1.5">
+        <div class="max-w-2xl mx-auto grid grid-cols-4 gap-1">
+            <button onclick="switchTab('market')" id="nav-market" class="nav-btn py-1.5 rounded-xl flex flex-col items-center justify-center gap-1 text-amber-400">
+                <i class="fa-solid fa-compact-disc text-base"></i>
+                <span class="text-[10px] font-semibold">Маркет & Поиск</span>
+            </button>
+            <button onclick="switchTab('sell')" id="nav-sell" class="nav-btn py-1.5 rounded-xl flex flex-col items-center justify-center gap-1 text-zinc-400 hover:text-zinc-200">
+                <i class="fa-solid fa-plus-circle text-base"></i>
+                <span class="text-[10px] font-semibold">Продать винил</span>
+            </button>
+            <button onclick="switchTab('collection')" id="nav-collection" class="nav-btn py-1.5 rounded-xl flex flex-col items-center justify-center gap-1 text-zinc-400 hover:text-zinc-200">
+                <i class="fa-solid fa-layer-group text-base"></i>
+                <span class="text-[10px] font-semibold">Коллекция</span>
+            </button>
+            <button onclick="switchTab('inquiries')" id="nav-inquiries" class="nav-btn relative py-1.5 rounded-xl flex flex-col items-center justify-center gap-1 text-zinc-400 hover:text-zinc-200">
+                <i class="fa-brands fa-telegram text-base"></i>
+                <span class="text-[10px] font-semibold">Заявки (ЛС)</span>
+                <span id="inquiriesBadge" class="hidden absolute top-1 right-6 min-w-[16px] h-4 px-1 rounded-full bg-emerald-500 text-black font-extrabold text-[10px] flex items-center justify-center">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===================================================== -->
+    <!-- ОСНОВНАЯ ЛОГИКА ПРИЛОЖЕНИЯ (БЕЗ ФЕЙКОВ И ПРЕСЕТОВ)    -->
+    <!-- ===================================================== -->
+    <script>
+        let tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+        let currentTelegramUser = 'collector';
+
+        function initTelegramMiniApp() {
+            try {
+                if (tg) {
+                    tg.ready();
+                    tg.expand();
+                    if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.username) {
+                        currentTelegramUser = tg.initDataUnsafe.user.username;
+                    }
+                }
+            } catch (e) {
+                console.warn('Запущено вне окружения Telegram:', e);
+            }
+            document.getElementById('tgUsernameDisplay').textContent = '@' + currentTelegramUser;
+            document.getElementById('sellTelegramUser').value = currentTelegramUser;
+            document.getElementById('buyerTgInput').value = currentTelegramUser;
+        }
+
+        // Чистые хранилища (без предзагруженных тестовых данных)
+        let discogsToken = localStorage.getItem('vinyl_discogs_user_token') || '';
+        let releasesDB = JSON.parse(localStorage.getItem('vinyl_clean_releases_db')) || [];
+        let listingsDB = JSON.parse(localStorage.getItem('vinyl_clean_listings_db')) || [];
+        let userCollection = JSON.parse(localStorage.getItem('vinyl_clean_collection')) || [];
+        let inquiriesDB = JSON.parse(localStorage.getItem('vinyl_clean_inquiries')) || [];
+
+        let currentTab = 'market';
+        let marketViewMode = 'listings'; // 'listings' | 'releases'
+        let collectionSubTab = 'have';   // 'have' | 'want'
+        let searchQuery = '';
+        let activeFilters = {
+            media: 'all',
+            city: '',
+            press: 'all',
+            maxPrice: null,
+            minYear: null,
+            ultrasonicOnly: false
+        };
+        let currentModalReleaseId = null;
+        let currentContactLot = null;
+
+        function saveState() {
+            localStorage.setItem('vinyl_clean_releases_db', JSON.stringify(releasesDB));
+            localStorage.setItem('vinyl_clean_listings_db', JSON.stringify(listingsDB));
+            localStorage.setItem('vinyl_clean_collection', JSON.stringify(userCollection));
+            localStorage.setItem('vinyl_clean_inquiries', JSON.stringify(inquiriesDB));
+            updateBadges();
+        }
+
+        function showToast(text, iconClass = 'fa-solid fa-circle-check text-amber-400') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastText').textContent = text;
+            document.getElementById('toastIcon').className = iconClass + ' text-base';
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3400);
+        }
+
+        // Управление персональным токеном Discogs API
+        function updateTokenUI() {
+            const banner = document.getElementById('missingTokenBanner');
+            const statusText = document.getElementById('tokenStatusText');
+            const btn = document.getElementById('tokenHeaderBtn');
+
+            if (discogsToken && discogsToken.trim().length > 5) {
+                banner.classList.add('hidden');
+                statusText.textContent = 'API Активен';
+                btn.className = 'px-2.5 py-1.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-xs font-medium text-emerald-400 flex items-center gap-1.5 transition';
+            } else {
+                banner.classList.remove('hidden');
+                statusText.textContent = 'API Токен';
+                btn.className = 'px-2.5 py-1.5 rounded-xl bg-zinc-800/90 hover:bg-zinc-700 border border-zinc-700 text-xs font-medium text-amber-400 flex items-center gap-1.5 transition';
+            }
+        }
+
+        function openTokenModal() {
+            document.getElementById('discogsTokenInput').value = discogsToken;
+            document.getElementById('discogsTokenModal').classList.remove('hidden');
+        }
+
+        function closeTokenModal() {
+            document.getElementById('discogsTokenModal').classList.add('hidden');
+        }
+
+        function saveDiscogsToken() {
+            const val = document.getElementById('discogsTokenInput').value.trim();
+            discogsToken = val;
+            localStorage.setItem('vinyl_discogs_user_token', discogsToken);
+            updateTokenUI();
+            closeTokenModal();
+            showToast(discogsToken ? 'Токен Discogs сохранён!' : 'Токен удалён');
+        }
+
+        function clearDiscogsToken() {
+            discogsToken = '';
+            document.getElementById('discogsTokenInput').value = '';
+            localStorage.removeItem('vinyl_discogs_user_token');
+            updateTokenUI();
+            showToast('Токен очищен');
+        }
+
+        function getDiscogsHeaders() {
+            const headers = {
+                'Accept': 'application/vnd.discogs.v2.plaintext+json'
+            };
+            if (discogsToken && discogsToken.trim().length > 0) {
+                headers['Authorization'] = `Discogs token=${discogsToken.trim()}`;
+            }
+            return headers;
+        }
+
+        function getGradeBadgeClass(grade) {
+            switch (grade) {
+                case 'M': return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                case 'NM': return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                case 'VG+': return 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+                default: return 'bg-zinc-800 text-zinc-300 border-zinc-700';
+            }
+        }
+
+        function switchTab(tabName) {
+            currentTab = tabName;
+            ['market', 'sell', 'collection', 'inquiries'].forEach(t => {
+                document.getElementById('tab-' + t).classList.add('hidden');
+                const btn = document.getElementById('nav-' + t);
+                btn.classList.remove('text-amber-400');
+                btn.classList.add('text-zinc-400');
+            });
+            document.getElementById('tab-' + tabName).classList.remove('hidden');
+            const activeBtn = document.getElementById('nav-' + tabName);
+            activeBtn.classList.remove('text-zinc-400');
+            activeBtn.classList.add('text-amber-400');
+
+            if (tabName === 'market') renderCurrentMarketView();
+            if (tabName === 'collection') renderCollectionView();
+            if (tabName === 'inquiries') renderInquiriesView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setMarketViewMode(mode) {
+            marketViewMode = mode;
+            const listBtn = document.getElementById('modeListingsBtn');
+            const relBtn = document.getElementById('modeReleasesBtn');
+            if (mode === 'listings') {
+                listBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black shadow transition flex items-center justify-center gap-1.5';
+                relBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1.5';
+            } else {
+                relBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black shadow transition flex items-center justify-center gap-1.5';
+                listBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition flex items-center justify-center gap-1.5';
+            }
+            renderCurrentMarketView();
+        }
+
+        // Распознавание числового кода релиза ([r123456] или 123456)
+        function extractDiscogsNumericId(raw) {
+            if (!raw) return null;
+            const cleaned = raw.trim();
+            const rMatch = cleaned.match(/^\[?r?(\d{3,12})\]?$/i);
+            return rMatch ? rMatch[1] : null;
+        }
+
+        function handleSearchInput(val) {
+            searchQuery = val.trim();
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (searchQuery.length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            if (currentTab !== 'market') switchTab('market');
+            renderCurrentMarketView();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('globalSearchInput');
+            input.value = '';
+            handleSearchInput('');
+        }
+
+        // Поиск в Discogs по токену (по ID релиза ИЛИ текстовый поиск по каталогу Discogs)
+        async function executeDiscogsSearch() {
+            const q = document.getElementById('globalSearchInput').value.trim();
+            if (!q) {
+                showToast('Введите название пластинки, каталожный номер или ID релиза');
+                return;
+            }
+
+            const releaseId = extractDiscogsNumericId(q);
+            if (releaseId) {
+                await fetchSingleReleaseFromDiscogs(releaseId, true);
+                return;
+            }
+
+            if (!discogsToken) {
+                openTokenModal();
+                showToast('Для поиска по названию в базе Discogs введите ваш API Токен', 'fa-solid fa-key text-amber-400');
+                return;
+            }
+
+            const loader = document.getElementById('searchLoadingState');
+            loader.classList.remove('hidden');
+
+            try {
+                const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(q)}&type=release&per_page=15`;
+                const response = await fetch(url, { headers: getDiscogsHeaders() });
+                if (!response.ok) throw new Error('Ошибка ответа Discogs API');
+                const data = await response.json();
+
+                if (!data.results || data.results.length === 0) {
+                    showToast('В базе Discogs ничего не найдено по этому запросу');
+                    loader.classList.add('hidden');
+                    return;
+                }
+
+                data.results.forEach(item => {
+                    const idStr = String(item.id);
+                    const parts = (item.title || '').split(' - ');
+                    const artist = parts.length > 1 ? parts[0].trim() : 'Неизвестен';
+                    const title = parts.length > 1 ? parts.slice(1).join(' - ').trim() : item.title;
+
+                    const mapped = {
+                        discogsId: idStr,
+                        artist: artist,
+                        title: title,
+                        label: (item.label && item.label[0]) ? item.label[0] : 'Не указан',
+                        catno: item.catno || 'Не указан',
+                        country: item.country || 'Не указана',
+                        year: item.year ? parseInt(item.year, 10) : '—',
+                        styles: item.style || item.genre || [],
+                        format: item.format ? item.format.join(', ') : 'Vinyl',
+                        matrix: 'Откройте карточку для загрузки полных матриц',
+                        barcode: (item.barcode && item.barcode[0]) ? item.barcode[0] : 'Не указан',
+                        cover: item.cover_image || item.thumb || `https://placehold.co/400x400/18181b/f59e0b?text=${encodeURIComponent(title)}`,
+                        tracklist: [],
+                        fullLoaded: false
+                    };
+
+                    const existIdx = releasesDB.findIndex(r => r.discogsId === idStr);
+                    if (existIdx === -1) {
+                        releasesDB.unshift(mapped);
+                    }
+                });
+
+                saveState();
+                setMarketViewMode('releases');
+                showToast(`Найдено релизов в Discogs: ${data.results.length}`);
+            } catch (err) {
+                showToast('Ошибка запроса к Discogs API. Проверьте правильность вашего токена.', 'fa-solid fa-triangle-exclamation text-rose-400');
+            } finally {
+                loader.classList.add('hidden');
+                renderCurrentMarketView();
+            }
+        }
+
+        // Получение полной информации о конкретном релизе по его ID
+        async function fetchSingleReleaseFromDiscogs(discogsId, openModalAfter = false) {
+            const loader = document.getElementById('searchLoadingState');
+            loader.classList.remove('hidden');
+
+            try {
+                const response = await fetch(`https://api.discogs.com/releases/${discogsId}`, {
+                    headers: getDiscogsHeaders()
+                });
+                if (!response.ok) throw new Error('Релиз не найден');
+                const data = await response.json();
+
+                const artistName = data.artists ? data.artists.map(a => a.name.replace(/\s*\(\d+\)$/, '')).join(', ') : 'Unknown Artist';
+                const labelInfo = data.labels && data.labels.length > 0 ? data.labels[0] : { name: 'Не указан', catno: 'Не указан' };
+
+                const fullRelease = {
+                    discogsId: String(data.id),
+                    artist: artistName,
+                    title: data.title || 'Без названия',
+                    label: labelInfo.name || 'Не указан',
+                    catno: labelInfo.catno || 'Не указан',
+                    country: data.country || 'Не указана',
+                    year: data.year || '—',
+                    styles: data.styles || data.genres || [],
+                    format: data.formats ? data.formats.map(f => `${f.name}${f.descriptions ? ' (' + f.descriptions.join(', ') + ')' : ''}`).join('; ') : 'Vinyl',
+                    matrix: (data.identifiers && data.identifiers.length > 0)
+                        ? data.identifiers.map(i => `${i.type}: ${i.value}`).slice(0, 4).join(' | ')
+                        : 'Матрицы не указаны в базе',
+                    barcode: (data.identifiers && data.identifiers.find(i => i.type === 'Barcode'))
+                        ? data.identifiers.find(i => i.type === 'Barcode').value
+                        : 'Не указан',
+                    cover: (data.images && data.images[0] && data.images[0].uri)
+                        ? data.images[0].uri
+                        : `https://placehold.co/400x400/18181b/f59e0b?text=${encodeURIComponent(artistName + ' - ' + data.title)}`,
+                    tracklist: (data.tracklist && data.tracklist.length > 0)
+                        ? data.tracklist.map(t => ({ pos: t.position || '-', title: t.title, duration: t.duration || '—' }))
+                        : [],
+                    fullLoaded: true
+                };
+
+                const existingIndex = releasesDB.findIndex(r => r.discogsId === fullRelease.discogsId);
+                if (existingIndex > -1) {
+                    releasesDB[existingIndex] = fullRelease;
+                } else {
+                    releasesDB.unshift(fullRelease);
+                }
+
+                saveState();
+                renderCurrentMarketView();
+                if (openModalAfter) {
+                    openReleaseModal(fullRelease.discogsId);
+                }
+                return fullRelease;
+            } catch (err) {
+                showToast('Не удалось загрузить релиз из Discogs. Проверьте ID или API токен.', 'fa-solid fa-triangle-exclamation text-rose-400');
+                return null;
+            } finally {
+                loader.classList.add('hidden');
+            }
+        }
+
+        // Рендер маркета и каталога (БЕЗ медианных цен: если лотов нет — пишем «Нет в продаже»)
+        function renderCurrentMarketView() {
+            updateBadges();
+            const container = document.getElementById('marketContentContainer');
+            const sortBy = document.getElementById('sortSelect').value;
+            const q = searchQuery.toLowerCase().replace(/^\[?r?(\d+)\]?$/i, '$1');
+
+            if (marketViewMode === 'listings') {
+                let filtered = listingsDB.filter(item => {
+                    if (q) {
+                        const haystack = `${item.artist} ${item.title} ${item.label} ${item.catno} ${item.discogsId} ${item.city} ${item.sellerUsername}`.toLowerCase();
+                        if (!haystack.includes(q)) return false;
+                    }
+                    if (activeFilters.city && !item.city.toLowerCase().includes(activeFilters.city.toLowerCase())) return false;
+                    if (activeFilters.press !== 'all' && !item.pressType.toLowerCase().includes(activeFilters.press.toLowerCase())) return false;
+                    if (activeFilters.maxPrice && item.price > activeFilters.maxPrice) return false;
+                    if (activeFilters.minYear && Number(item.year) < activeFilters.minYear) return false;
+                    if (activeFilters.ultrasonicOnly && !item.ultrasonic) return false;
+
+                    if (activeFilters.media === 'M' && item.mediaCond !== 'M') return false;
+                    if (activeFilters.media === 'NM' && !['M', 'NM'].includes(item.mediaCond)) return false;
+                    if (activeFilters.media === 'VG+' && !['M', 'NM', 'VG+'].includes(item.mediaCond)) return false;
+
+                    return true;
+                });
+
+                const condRank = { 'M': 5, 'NM': 4, 'VG+': 3, 'VG': 2, 'G': 1 };
+                filtered.sort((a, b) => {
+                    if (sortBy === 'price_asc') return a.price - b.price;
+                    if (sortBy === 'price_desc') return b.price - a.price;
+                    if (sortBy === 'condition') return (condRank[b.mediaCond] || 0) - (condRank[a.mediaCond] || 0);
+                    if (sortBy === 'year_asc') return (Number(a.year) || 0) - (Number(b.year) || 0);
+                    return b.createdAt - a.createdAt;
+                });
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-record-vinyl"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">В продаже пока нет выставленных пластинок</h3>
+                            <p class="text-xs text-zinc-400 max-w-sm mx-auto">Вы можете найти любую пластинку через поиск Discogs сверху или выставить свой первый винил на продажу во вкладке «Продать винил».</p>
+                            <div class="flex flex-wrap justify-center gap-2 pt-1">
+                                <button onclick="switchTab('sell')" class="px-4 py-2 rounded-xl bg-amber-500 text-xs font-bold text-black">Выставить пластинку</button>
+                                ${searchQuery ? `<button onclick="executeDiscogsSearch()" class="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-amber-400 border border-amber-500/30">Искать «${searchQuery}» в Discogs</button>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(lot => `
+                    <article class="p-3.5 rounded-2xl bg-zinc-900/95 border border-zinc-800/90 hover:border-zinc-700 transition space-y-3">
+                        <div class="flex gap-3.5">
+                            <div onclick="openReleaseModal('${lot.discogsId}')" class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 shrink-0 cursor-pointer group">
+                                <img src="${lot.cover}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" alt="${lot.title}" class="w-full h-full object-cover group-hover:scale-105 transition">
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-start justify-between gap-2">
+                                    <div onclick="openReleaseModal('${lot.discogsId}')" class="cursor-pointer truncate">
+                                        <h3 class="text-sm font-bold text-white truncate hover:text-amber-400 transition">${lot.artist} — ${lot.title}</h3>
+                                        <p class="text-[11px] text-zinc-400 truncate">${lot.label} • <span class="font-mono text-zinc-300">${lot.catno}</span> • ${lot.year}</p>
+                                    </div>
+                                    <div class="text-right shrink-0">
+                                        <div class="text-base font-extrabold font-mono text-amber-400">${lot.price.toLocaleString('ru-RU')} ₽</div>
+                                        <div class="text-[10px] text-zinc-500">${lot.city}</div>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                                    <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold border ${getGradeBadgeClass(lot.mediaCond)}">
+                                        Винил: ${lot.mediaCond}
+                                    </span>
+                                    <span class="px-2 py-0.5 rounded-md text-[11px] font-mono border bg-zinc-800/90 text-zinc-300 border-zinc-700">
+                                        Конверт: ${lot.sleeveCond}
+                                    </span>
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] bg-zinc-950 text-zinc-400 border border-zinc-800">
+                                        ${lot.pressType}
+                                    </span>
+                                    ${lot.ultrasonic ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-sky-500/15 text-sky-300 border border-sky-500/30">УЗ-мойка</span>` : ''}
+                                    ${lot.obi ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/15 text-rose-300 border border-rose-500/30">OBI</span>` : ''}
+                                    ${lot.sealed ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Sealed</span>` : ''}
+                                </div>
+
+                                <p class="text-xs text-zinc-300 mt-2 line-clamp-2 bg-zinc-950/60 px-2.5 py-1.5 rounded-lg border border-zinc-800/80">
+                                    ${lot.comment}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="pt-2.5 border-t border-zinc-800/80 flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-amber-400 text-xs font-bold shrink-0">
+                                    <i class="fa-brands fa-telegram"></i>
+                                </div>
+                                <div class="truncate">
+                                    <span class="text-xs font-mono font-semibold text-zinc-200">@${lot.sellerUsername}</span>
+                                    <div class="text-[10px] text-zinc-500 truncate">${lot.shipping}</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-1.5 shrink-0">
+                                <button onclick="openReleaseModal('${lot.discogsId}')" class="px-2.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium transition">
+                                    О релизе
+                                </button>
+                                <button onclick="openContactSellerModal('${lot.id}')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs transition flex items-center gap-1.5 shadow-md shadow-amber-500/10">
+                                    <i class="fa-brands fa-telegram text-sm"></i>
+                                    <span>Сообщить продавцу</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            } else {
+                // Режим: Каталог найденных релизов Discogs
+                let filteredReleases = releasesDB.filter(r => {
+                    if (q) {
+                        const hay = `${r.artist} ${r.title} ${r.label} ${r.catno} ${r.discogsId} ${r.country}`.toLowerCase();
+                        if (!hay.includes(q)) return false;
+                    }
+                    return true;
+                });
+
+                if (filteredReleases.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </div>
+                            <h3 class="text-sm font-bold text-white">Каталог релизов пуст</h3>
+                            <p class="text-xs text-zinc-400 max-w-sm mx-auto">Вбейте название альбома, исполнителя, каталожный номер или код релиза в строку поиска выше и нажмите «Найти».</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = filteredReleases.map(rel => {
+                    const activeLots = listingsDB.filter(l => l.discogsId === rel.discogsId);
+                    const minPrice = activeLots.length > 0 ? Math.min(...activeLots.map(l => l.price)) : null;
+
+                    return `
+                        <div onclick="openReleaseModal('${rel.discogsId}')" class="p-3.5 rounded-2xl bg-zinc-900/95 border border-zinc-800 hover:border-amber-500/50 transition cursor-pointer flex items-center gap-3.5">
+                            <img src="${rel.cover}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-20 h-20 rounded-xl object-cover border border-zinc-700 shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">#${rel.discogsId}</span>
+                                    <span class="text-[11px] text-zinc-400">${rel.country} • ${rel.year}</span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white truncate mt-1">${rel.artist} — ${rel.title}</h3>
+                                <p class="text-xs text-zinc-400 truncate">${rel.label} (${rel.catno}) • ${rel.format}</p>
+                                <div class="flex items-center justify-between mt-2 pt-1.5 border-t border-zinc-800/80">
+                                    <span class="text-[11px]">
+                                        ${activeLots.length > 0 
+                                            ? `<span class="text-emerald-400 font-semibold">В продаже: ${activeLots.length} шт. (от ${minPrice.toLocaleString('ru-RU')} ₽)</span>` 
+                                            : `<span class="text-zinc-500">Нет в продаже</span>`}
+                                    </span>
+                                    <span class="text-xs text-amber-400 font-semibold flex items-center gap-1">
+                                        <span>Открыть релиз</span>
+                                        <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Полная карточка релиза (при открытии подгружает треклист и матрицы из Discogs API, если они ещё не загружены)
+        async function openReleaseModal(discogsId) {
+            let rel = releasesDB.find(r => r.discogsId === String(discogsId));
+            if (!rel || !rel.fullLoaded) {
+                const fetched = await fetchSingleReleaseFromDiscogs(String(discogsId), false);
+                if (fetched) rel = fetched;
+            }
+            if (!rel) return;
+
+            currentModalReleaseId = rel.discogsId;
+            document.getElementById('modalReleaseDiscogsCode').textContent = `#${rel.discogsId}`;
+            document.getElementById('modalReleaseCountryYear').textContent = `${rel.country} • ${rel.year}`;
+
+            const matchingLots = listingsDB.filter(l => l.discogsId === rel.discogsId);
+            const inHave = userCollection.some(c => c.discogsId === rel.discogsId && c.type === 'have');
+            const inWant = userCollection.some(c => c.discogsId === rel.discogsId && c.type === 'want');
+
+            const body = document.getElementById('releaseModalBody');
+            body.innerHTML = `
+                <div class="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
+                    <div class="relative w-36 h-36 shrink-0">
+                        <div class="absolute -right-5 top-2 w-32 h-32 rounded-full vinyl-grooves border border-zinc-700 flex items-center justify-center animate-spin-slow">
+                            <div class="w-10 h-10 rounded-full bg-amber-500 border-4 border-zinc-950"></div>
+                        </div>
+                        <img src="${rel.cover}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="relative z-10 w-36 h-36 rounded-2xl object-cover border border-zinc-700 shadow-xl">
+                    </div>
+
+                    <div class="flex-1 text-center sm:text-left space-y-1.5">
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-1.5">
+                            ${(rel.styles || []).map(s => `<span class="text-[10px] px-2 py-0.5 rounded-full bg-zinc-800 text-zinc-300">${s}</span>`).join('')}
+                        </div>
+                        <h2 class="text-lg font-extrabold text-white leading-snug">${rel.artist} — ${rel.title}</h2>
+                        <div class="text-xs text-zinc-300 space-y-0.5">
+                            <div><span class="text-zinc-500">Лейбл:</span> ${rel.label} — <span class="font-mono text-amber-400">${rel.catno}</span></div>
+                            <div><span class="text-zinc-500">Формат:</span> ${rel.format}</div>
+                            <div><span class="text-zinc-500">Матрица / Идентификаторы:</span> <span class="font-mono text-[11px] text-zinc-400">${rel.matrix}</span></div>
+                        </div>
+
+                        <div class="flex flex-wrap justify-center sm:justify-start gap-2 pt-2">
+                            <button onclick="toggleCollectionItem('${rel.discogsId}', 'have')" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${inHave ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-zinc-800 text-zinc-300 border-zinc-700'}">
+                                <i class="fa-solid ${inHave ? 'fa-check' : 'fa-record-vinyl'} mr-1"></i>
+                                ${inHave ? 'В коллекции' : 'В коллекцию'}
+                            </button>
+                            <button onclick="toggleCollectionItem('${rel.discogsId}', 'want')" class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition ${inWant ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-zinc-800 text-zinc-300 border-zinc-700'}">
+                                <i class="fa-solid fa-heart mr-1"></i>
+                                ${inWant ? 'В Wantlist' : 'Хочу купить'}
+                            </button>
+                            <button onclick="sellThisRelease('${rel.discogsId}')" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-amber-500 text-black hover:bg-amber-400 transition">
+                                <i class="fa-solid fa-plus mr-1"></i>Выставить на продажу
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Треклист издания -->
+                <div class="p-3.5 rounded-2xl bg-zinc-950/90 border border-zinc-800/90 space-y-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 flex items-center justify-between">
+                        <span><i class="fa-solid fa-list-ol text-amber-500 mr-1.5"></i>Треклист</span>
+                        <span class="font-mono text-[11px] text-zinc-500">${(rel.tracklist || []).length} треков</span>
+                    </h4>
+                    ${(!rel.tracklist || rel.tracklist.length === 0) ? `
+                        <p class="text-xs text-zinc-500 py-1">Треклист не указан в карточке Discogs</p>
+                    ` : `
+                        <div class="divide-y divide-zinc-800/60">
+                            ${rel.tracklist.map(t => `
+                                <div class="py-1.5 flex items-center justify-between text-xs">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="font-mono text-amber-400 w-6">${t.pos}</span>
+                                        <span class="text-zinc-200">${t.title}</span>
+                                    </div>
+                                    <span class="font-mono text-zinc-500">${t.duration}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `}
+                </div>
+
+                <!-- Предложения продавцов (Без выдуманной медианной стоимости) -->
+                <div class="space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400">
+                            <i class="fa-solid fa-store mr-1.5"></i>Предложения продавцов (${matchingLots.length})
+                        </h4>
+                        <span class="text-[11px] text-zinc-400">
+                            ${matchingLots.length > 0 
+                                ? `От ${Math.min(...matchingLots.map(l => l.price)).toLocaleString('ru-RU')} ₽` 
+                                : 'Нет в продаже'}
+                        </span>
+                    </div>
+
+                    ${matchingLots.length === 0 ? `
+                        <div class="p-4 rounded-2xl bg-zinc-900/70 border border-zinc-800 text-center space-y-2">
+                            <p class="text-xs text-zinc-400">Этот релиз сейчас никто не продаёт. Если у вас есть эта пластинка, вы можете выставить её со своей ценой.</p>
+                            <button onclick="sellThisRelease('${rel.discogsId}')" class="px-3.5 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs">Продать эту пластинку</button>
+                        </div>
+                    ` : matchingLots.map(lot => `
+                        <div class="p-3 rounded-2xl bg-zinc-900 border border-zinc-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-extrabold font-mono text-amber-400">${lot.price.toLocaleString('ru-RU')} ₽</span>
+                                    <span class="px-2 py-0.5 rounded text-[11px] font-mono border ${getGradeBadgeClass(lot.mediaCond)}">${lot.mediaCond} / ${lot.sleeveCond}</span>
+                                    <span class="text-xs text-zinc-400">${lot.city}</span>
+                                </div>
+                                <p class="text-xs text-zinc-300">${lot.comment}</p>
+                                <div class="text-[11px] text-zinc-500">Продавец: <span class="font-mono text-zinc-300">@${lot.sellerUsername}</span> • ${lot.shipping}</div>
+                            </div>
+                            <button onclick="closeReleaseModal(); openContactSellerModal('${lot.id}')" class="shrink-0 px-3.5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs flex items-center justify-center gap-1.5">
+                                <i class="fa-brands fa-telegram"></i>
+                                <span>Сообщить продавцу</span>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+
+            document.getElementById('releaseModal').classList.remove('hidden');
+        }
+
+        function closeReleaseModal() {
+            document.getElementById('releaseModal').classList.add('hidden');
+        }
+
+        function copyDiscogsCodeFromModal() {
+            if (!currentModalReleaseId) return;
+            const tempInput = document.createElement('input');
+            tempInput.value = currentModalReleaseId;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            showToast(`ID релиза ${currentModalReleaseId} скопирован`);
+        }
+
+        // Связь с продавцом в Telegram
+        function openContactSellerModal(lotId) {
+            const lot = listingsDB.find(l => l.id === lotId);
+            if (!lot) return;
+            currentContactLot = lot;
+
+            document.getElementById('contactModalLotSummary').innerHTML = `
+                <img src="${lot.cover}" class="w-14 h-14 rounded-xl object-cover border border-zinc-700 shrink-0">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-amber-400">${lot.mediaCond}/${lot.sleeveCond}</span>
+                        <span class="text-sm font-extrabold font-mono text-white">${lot.price.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                    <h4 class="text-xs font-bold text-white truncate">${lot.artist} — ${lot.title} (${lot.year})</h4>
+                    <p class="text-[11px] text-zinc-400">Продавец: <span class="font-mono text-sky-400">@${lot.sellerUsername}</span> (${lot.city})</p>
+                </div>
+            `;
+
+            const defaultMsg = `Здравствуйте, @${lot.sellerUsername}! Хочу купить у вас пластинку ${lot.artist} — ${lot.title} (${lot.year}, состояние ${lot.mediaCond}/${lot.sleeveCond}) за ${lot.price} ₽. Напишите мне, пожалуйста, в ЛС!`;
+            document.getElementById('buyerMessageText').value = defaultMsg;
+            document.getElementById('contactSellerModal').classList.remove('hidden');
+        }
+
+        function closeContactSellerModal() {
+            document.getElementById('contactSellerModal').classList.add('hidden');
+        }
+
+        function sendSellerInquiryNotification() {
+            if (!currentContactLot) return;
+            const buyerUser = (document.getElementById('buyerTgInput').value || currentTelegramUser).replace('@', '').trim();
+            const delivery = document.getElementById('buyerDeliverySelect').value;
+            const message = document.getElementById('buyerMessageText').value.trim();
+
+            const newInquiry = {
+                id: 'inq-' + Date.now(),
+                lotId: currentContactLot.id,
+                discogsId: currentContactLot.discogsId,
+                releaseTitle: `${currentContactLot.artist} — ${currentContactLot.title} (${currentContactLot.year})`,
+                price: currentContactLot.price,
+                buyerUsername: buyerUser,
+                sellerUsername: currentContactLot.sellerUsername,
+                delivery: delivery,
+                message: message,
+                timestamp: new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }),
+                status: 'Ожидает ответа продавца в ЛС'
+            };
+
+            inquiriesDB.unshift(newInquiry);
+            saveState();
+            closeContactSellerModal();
+            showToast(`Запрос отправлен продавцу @${currentContactLot.sellerUsername}!`);
+            switchTab('inquiries');
+        }
+
+        function openDirectTelegramChatWithSeller() {
+            if (!currentContactLot) return;
+            const message = document.getElementById('buyerMessageText').value.trim();
+            const cleanUsername = currentContactLot.sellerUsername.replace('@', '').trim();
+            const tgUrl = `https://t.me/${cleanUsername}?text=${encodeURIComponent(message)}`;
+
+            sendSellerInquiryNotification();
+
+            if (tg && typeof tg.openTelegramLink === 'function') {
+                tg.openTelegramLink(tgUrl);
+            } else {
+                window.open(tgUrl, '_blank');
+            }
+        }
+
+        // Автозаполнение формы продажи из Discogs API
+        async function autofillSellFormFromDiscogs() {
+            const query = document.getElementById('sellDiscogsLookupInput').value.trim();
+            if (!query) {
+                showToast('Введите ID релиза или название пластинки');
+                return;
+            }
+
+            const btn = document.getElementById('sellAutofillBtn');
+            btn.disabled = true;
+            btn.textContent = 'Загрузка...';
+
+            try {
+                const numericId = extractDiscogsNumericId(query);
+                let found = null;
+
+                if (numericId) {
+                    found = await fetchSingleReleaseFromDiscogs(numericId, false);
+                } else {
+                    if (!discogsToken) {
+                        openTokenModal();
+                        showToast('Для поиска по названию введите ваш Discogs API Токен');
+                        return;
+                    }
+                    const res = await fetch(`https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&per_page=1`, {
+                        headers: getDiscogsHeaders()
+                    });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.results && data.results.length > 0) {
+                            found = await fetchSingleReleaseFromDiscogs(String(data.results[0].id), false);
+                        }
+                    }
+                }
+
+                if (found) {
+                    fillSellFormFields(found);
+                    showToast(`Данные релиза «${found.artist} — ${found.title}» заполнены!`);
+                } else {
+                    showToast('Релиз не найден, проверьте запрос или заполните поля вручную');
+                }
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles"></i><span>Заполнить</span>';
+            }
+        }
+
+        function sellThisRelease(discogsId) {
+            closeReleaseModal();
+            switchTab('sell');
+            const rel = releasesDB.find(r => r.discogsId === String(discogsId));
+            if (rel) fillSellFormFields(rel);
+        }
+
+        function fillSellFormFields(rel) {
+            const badge = document.getElementById('sellSelectedDiscogsBadge');
+            badge.textContent = `ID #${rel.discogsId}`;
+            badge.dataset.discogsId = rel.discogsId;
+            document.getElementById('sellArtist').value = rel.artist || '';
+            document.getElementById('sellTitle').value = rel.title || '';
+            document.getElementById('sellLabel').value = rel.label || '';
+            document.getElementById('sellCatno').value = rel.catno || '';
+            document.getElementById('sellYear').value = parseInt(rel.year, 10) || '';
+            document.getElementById('sellCountry').value = rel.country || '';
+            document.getElementById('sellCoverUrl').value = rel.cover || '';
+            document.getElementById('sellPreviewCover').src = rel.cover || 'https://placehold.co/300x300/18181b/f59e0b?text=VINYL';
+        }
+
+        function submitVinylListing(e) {
+            e.preventDefault();
+            const badge = document.getElementById('sellSelectedDiscogsBadge');
+            const discogsId = badge.dataset.discogsId || String(Date.now()).slice(-7);
+            const artist = document.getElementById('sellArtist').value.trim();
+            const title = document.getElementById('sellTitle').value.trim();
+            const label = document.getElementById('sellLabel').value.trim();
+            const catno = document.getElementById('sellCatno').value.trim();
+            const year = parseInt(document.getElementById('sellYear').value, 10) || '—';
+            const country = document.getElementById('sellCountry').value.trim() || 'Не указана';
+            const pressType = document.getElementById('sellPressType').value;
+            const cover = document.getElementById('sellCoverUrl').value.trim() || `https://placehold.co/400x400/18181b/f59e0b?text=${encodeURIComponent(artist + ' - ' + title)}`;
+
+            const newLot = {
+                id: 'lot-' + Date.now(),
+                discogsId: discogsId,
+                artist,
+                title,
+                label,
+                catno,
+                year,
+                country,
+                pressType,
+                mediaCond: document.getElementById('sellMediaCond').value,
+                sleeveCond: document.getElementById('sellSleeveCond').value,
+                price: parseInt(document.getElementById('sellPrice').value, 10),
+                city: document.getElementById('sellCity').value.trim(),
+                sellerUsername: document.getElementById('sellTelegramUser').value.replace('@', '').trim() || currentTelegramUser,
+                shipping: document.getElementById('sellShipping').value.trim(),
+                ultrasonic: document.getElementById('featUltrasonic').checked,
+                insert: document.getElementById('featInsert').checked,
+                obi: document.getElementById('featObi').checked,
+                sealed: document.getElementById('featSealed').checked,
+                comment: document.getElementById('sellComment').value.trim(),
+                cover,
+                createdAt: Date.now()
+            };
+
+            if (!releasesDB.some(r => r.discogsId === discogsId)) {
+                releasesDB.unshift({
+                    discogsId,
+                    artist,
+                    title,
+                    label,
+                    catno,
+                    country,
+                    year,
+                    styles: [pressType],
+                    format: "LP, Album",
+                    matrix: catno,
+                    barcode: "Не указан",
+                    cover,
+                    tracklist: [],
+                    fullLoaded: false
+                });
+            }
+
+            listingsDB.unshift(newLot);
+            saveState();
+            e.target.reset();
+            badge.textContent = 'Не привязан к ID';
+            delete badge.dataset.discogsId;
+            showToast(`Пластинка «${artist} — ${title}» выставлена за ${newLot.price.toLocaleString('ru-RU')} ₽!`);
+            setMarketViewMode('listings');
+            switchTab('market');
+        }
+
+        // Фильтры
+        function toggleFilterDrawer() {
+            document.getElementById('filterDrawerModal').classList.toggle('hidden');
+        }
+
+        function applyAdvancedFilters() {
+            activeFilters.media = document.getElementById('filterMediaSelect').value;
+            activeFilters.city = document.getElementById('filterCityInput').value.trim();
+            activeFilters.press = document.getElementById('filterPressSelect').value;
+            const maxP = parseInt(document.getElementById('filterMaxPrice').value, 10);
+            activeFilters.maxPrice = isNaN(maxP) ? null : maxP;
+            const minY = parseInt(document.getElementById('filterMinYear').value, 10);
+            activeFilters.minYear = isNaN(minY) ? null : minY;
+            activeFilters.ultrasonicOnly = document.getElementById('filterUltrasonicOnly').checked;
+
+            toggleFilterDrawer();
+            renderCurrentMarketView();
+            showToast('Фильтры применены');
+        }
+
+        function resetAllFilters() {
+            activeFilters = { media: 'all', city: '', press: 'all', maxPrice: null, minYear: null, ultrasonicOnly: false };
+            document.getElementById('filterMediaSelect').value = 'all';
+            document.getElementById('filterCityInput').value = '';
+            document.getElementById('filterPressSelect').value = 'all';
+            document.getElementById('filterMaxPrice').value = '';
+            document.getElementById('filterMinYear').value = '';
+            document.getElementById('filterUltrasonicOnly').checked = false;
+            document.getElementById('filterDrawerModal').classList.add('hidden');
+            clearSearch();
+            renderCurrentMarketView();
+        }
+
+        // Коллекция и Wantlist (отображает только реальные цены выставленных лотов или «Нет в продаже»)
+        function switchCollectionSubTab(sub) {
+            collectionSubTab = sub;
+            const haveBtn = document.getElementById('colSubBtnHave');
+            const wantBtn = document.getElementById('colSubBtnWant');
+            if (sub === 'have') {
+                haveBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black transition';
+                wantBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition';
+            } else {
+                wantBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black transition';
+                haveBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white transition';
+            }
+            renderCollectionView();
+        }
+
+        function toggleCollectionItem(discogsId, type) {
+            const idx = userCollection.findIndex(c => c.discogsId === String(discogsId) && c.type === type);
+            if (idx > -1) {
+                userCollection.splice(idx, 1);
+                showToast('Удалено из списка');
+            } else {
+                userCollection.push({ discogsId: String(discogsId), type, addedAt: Date.now() });
+                showToast(type === 'have' ? 'Добавлено в коллекцию' : 'Добавлено в Wantlist');
+            }
+            saveState();
+            if (currentModalReleaseId) openReleaseModal(currentModalReleaseId);
+            if (currentTab === 'collection') renderCollectionView();
+        }
+
+        function renderCollectionView() {
+            updateBadges();
+            const list = userCollection.filter(c => c.type === collectionSubTab);
+            const container = document.getElementById('collectionListContainer');
+
+            if (list.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 text-center space-y-2">
+                        <p class="text-xs text-zinc-400">Список пока пуст. Найдите нужные пластинки через поиск Discogs и добавьте их в коллекцию или Wantlist.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = list.map(entry => {
+                const rel = releasesDB.find(r => r.discogsId === entry.discogsId);
+                if (!rel) return '';
+                const activeLots = listingsDB.filter(l => l.discogsId === rel.discogsId);
+                const minPrice = activeLots.length > 0 ? Math.min(...activeLots.map(l => l.price)) : null;
+
+                return `
+                    <div class="p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3">
+                        <div onclick="openReleaseModal('${rel.discogsId}')" class="flex items-center gap-3 min-w-0 cursor-pointer">
+                            <img src="${rel.cover}" class="w-16 h-16 rounded-xl object-cover border border-zinc-700 shrink-0">
+                            <div class="min-w-0">
+                                <span class="text-[10px] font-mono text-amber-400">#${rel.discogsId} • ${rel.year}</span>
+                                <h4 class="text-sm font-bold text-white truncate">${rel.artist} — ${rel.title}</h4>
+                                <p class="text-xs text-zinc-400">
+                                    ${activeLots.length > 0 
+                                        ? `<span class="text-emerald-400">В продаже: ${activeLots.length} шт. (от ${minPrice.toLocaleString('ru-RU')} ₽)</span>` 
+                                        : 'Нет в продаже'}
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="toggleCollectionItem('${rel.discogsId}', '${entry.type}')" class="p-2 rounded-xl bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 text-xs">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Заявки на покупку и переход в ЛС Telegram
+        function renderInquiriesView() {
+            updateBadges();
+            const container = document.getElementById('inquiriesContainer');
+            if (inquiriesDB.length === 0) {
+                container.innerHTML = `<div class="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 text-center text-xs text-zinc-400">Пока нет активных запросов на покупку.</div>`;
+                return;
+            }
+
+            container.innerHTML = inquiriesDB.map(inq => `
+                <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <span class="text-[11px] text-emerald-400 font-medium">${inq.status}</span>
+                            <h4 class="text-sm font-bold text-white mt-0.5">${inq.releaseTitle}</h4>
+                        </div>
+                        <div class="text-right shrink-0">
+                            <div class="text-sm font-extrabold font-mono text-amber-400">${inq.price.toLocaleString('ru-RU')} ₽</div>
+                            <div class="text-[10px] text-zinc-500">${inq.timestamp}</div>
+                        </div>
+                    </div>
+
+                    <div class="p-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-300">
+                        ${inq.message}
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+                        <div class="text-zinc-400 space-x-2">
+                            <span>Покупатель: <b class="font-mono text-sky-400">@${inq.buyerUsername}</b></span>
+                            <span>•</span>
+                            <span>Продавец: <b class="font-mono text-amber-400">@${inq.sellerUsername}</b></span>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <button onclick="openTelegramDM('${inq.buyerUsername}', 'Здравствуйте! Пишу вам по вашему запросу на покупку пластинки ${inq.releaseTitle}.')" class="px-3 py-1.5 rounded-xl bg-sky-500/20 hover:bg-sky-500/30 text-sky-300 border border-sky-500/40 font-semibold flex items-center gap-1.5">
+                                <i class="fa-brands fa-telegram"></i>
+                                <span>Написать покупателю в ЛС</span>
+                            </button>
+                            <button onclick="openTelegramDM('${inq.sellerUsername}', 'Здравствуйте! Интересует покупка пластинки ${inq.releaseTitle}.')" class="px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 font-semibold flex items-center gap-1.5">
+                                <span>ЛС Продавца</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openTelegramDM(username, text) {
+            const clean = username.replace('@', '').trim();
+            const url = `https://t.me/${clean}?text=${encodeURIComponent(text)}`;
+            if (tg && typeof tg.openTelegramLink === 'function') {
+                tg.openTelegramLink(url);
+            } else {
+                window.open(url, '_blank');
+            }
+        }
+
+        function updateBadges() {
+            document.getElementById('listingsCountBadge').textContent = listingsDB.length;
+            document.getElementById('releasesCountBadge').textContent = releasesDB.length;
+
+            const inqBadge = document.getElementById('inquiriesBadge');
+            if (inquiriesDB.length > 0) {
+                inqBadge.textContent = inquiriesDB.length;
+                inqBadge.classList.remove('hidden');
+            } else {
+                inqBadge.classList.add('hidden');
+            }
+
+            const haveList = userCollection.filter(c => c.type === 'have');
+            const wantList = userCollection.filter(c => c.type === 'want');
+            document.getElementById('colHaveCount').textContent = haveList.length;
+            document.getElementById('colWantCount').textContent = wantList.length;
+
+            let filterCount = 0;
+            if (activeFilters.media !== 'all') filterCount++;
+            if (activeFilters.city) filterCount++;
+            if (activeFilters.press !== 'all') filterCount++;
+            if (activeFilters.maxPrice) filterCount++;
+            if (activeFilters.minYear) filterCount++;
+            if (activeFilters.ultrasonicOnly) filterCount++;
+
+            const fBadge = document.getElementById('activeFiltersBadge');
+            if (filterCount > 0) {
+                fBadge.textContent = filterCount;
+                fBadge.classList.remove('hidden');
+                document.getElementById('activeFilterSummary').textContent = `Активно фильтров: ${filterCount}`;
+            } else {
+                fBadge.classList.add('hidden');
+                document.getElementById('activeFilterSummary').textContent = searchQuery
+                    ? `Фильтр по запросу: «${searchQuery}»`
+                    : 'Актуальные объявления продавцов';
+            }
+        }
+
+        window.onload = function () {
+            initTelegramMiniApp();
+            updateTokenUI();
+            renderCurrentMarketView();
+        };
+    </script>
 </body>
 </html>
