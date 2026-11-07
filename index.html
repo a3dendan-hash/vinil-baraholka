@@ -62,9 +62,9 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
     <div id="headerSearchAndFilters" class="relative flex items-center gap-2 mt-3">
       <div class="relative flex-1">
         <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400 text-sm"></i>
-        <input id="globalSearchInput" type="text" placeholder="Артист, альбом, кат. номер или ID релиза..." class="w-full pl-9 pr-24 py-2.5 bg-zinc-900/90 border border-zinc-700/80 focus:border-amber-500 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none" oninput="handleSearchInput(this.value)" onkeydown="if(event.key==='Enter') executeDiscogsSearch()">
+        <input id="globalSearchInput" type="text" placeholder="Введите ID релиза Discogs (напр. 249504)..." class="w-full pl-9 pr-24 py-2.5 bg-zinc-900/90 border border-zinc-700/80 focus:border-amber-500 rounded-xl text-sm text-white placeholder-zinc-500 focus:outline-none" oninput="handleSearchInput(this.value)" onkeydown="if(event.key==='Enter') executeDiscogsSearch()">
         <button type="button" id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-20 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 px-1.5"><i class="fa-solid fa-circle-xmark"></i></button>
-        <button type="button" onclick="executeDiscogsSearch()" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-1 rounded-lg text-xs">Найти</button>
+        <button type="button" onclick="executeDiscogsSearch()" class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-amber-400 text-black font-bold px-3 py-1 rounded-lg text-xs">По ID</button>
       </div>
       <button type="button" onclick="toggleFilterDrawer()" id="filterBtn" class="relative p-2.5 rounded-xl bg-zinc-900 border border-zinc-700/80 text-zinc-300 hover:text-amber-400">
         <i class="fa-solid fa-sliders"></i>
@@ -80,7 +80,7 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
       <div class="w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0"><i class="fa-solid fa-key"></i></div>
       <div>
         <h4 class="text-xs font-bold text-white">Подключите ваш Discogs API Токен</h4>
-        <p class="text-[11px] text-zinc-400">Для поиска пластинок, цен и обложек из базы Discogs введите ваш токен.</p>
+        <p class="text-[11px] text-zinc-400">Для загрузки релизов по ID из базы Discogs введите ваш персональный токен.</p>
       </div>
     </div>
     <button type="button" onclick="openTokenModal()" class="shrink-0 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs">Ввести токен</button>
@@ -113,7 +113,7 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
 
     <div id="searchLoadingState" class="hidden p-8 rounded-2xl bg-zinc-900/70 border border-zinc-800 text-center space-y-2">
       <i class="fa-solid fa-compact-disc fa-spin text-2xl text-amber-500"></i>
-      <p class="text-xs text-zinc-300 font-medium">Запрашиваем данные из базы Discogs...</p>
+      <p class="text-xs text-zinc-300 font-medium">Запрашиваем релиз по ID из базы Discogs...</p>
     </div>
 
     <div id="marketContentContainer" class="space-y-3 pb-6"></div>
@@ -123,11 +123,11 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
   <section id="tab-sell" class="hidden space-y-4 pb-8">
     <div class="card">
       <h2 class="text-base font-bold text-white flex items-center gap-2"><i class="fa-solid fa-plus-circle text-amber-500"></i><span>Выставить пластинку на продажу</span></h2>
-      <p class="text-xs text-zinc-400 mt-1">Автозаполните данные по ID или названию из Discogs и укажите вашу цену.</p>
+      <p class="text-xs text-zinc-400 mt-1">Автозаполните данные по ID релиза из Discogs и укажите вашу цену.</p>
       <div class="mt-3 pt-3 border-t border-zinc-800">
-        <label class="block text-xs font-semibold text-amber-400 mb-1.5">Автозаполнение по базе Discogs</label>
+        <label class="block text-xs font-semibold text-amber-400 mb-1.5">Автозаполнение по ID релиза Discogs</label>
         <div class="flex gap-2">
-          <input id="sellDiscogsLookupInput" type="text" placeholder="ID релиза или исполнитель / альбом..." class="inp flex-1" onkeydown="if(event.key==='Enter'){event.preventDefault();autofillSellFormFromDiscogs();}">
+          <input id="sellDiscogsLookupInput" type="text" placeholder="Только ID релиза Discogs (напр. 249504 или [r249504])..." class="inp flex-1 font-mono" onkeydown="if(event.key==='Enter'){event.preventDefault();autofillSellFormFromDiscogs();}">
           <button type="button" onclick="autofillSellFormFromDiscogs()" id="sellAutofillBtn" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs shrink-0 flex items-center gap-1.5">
             <i class="fa-solid fa-wand-magic-sparkles"></i><span>Заполнить</span>
           </button>
@@ -368,7 +368,7 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
       <button type="button" onclick="closeTokenModal()" class="w-8 h-8 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="text-xs text-zinc-400 space-y-2">
-      <p>Для поиска пластинок напрямую через базу Discogs укажите ваш <b>Personal Access Token</b>.</p>
+      <p>Для загрузки информации о релизах по ID из базы Discogs укажите ваш <b>Personal Access Token</b>.</p>
       <div class="p-3 rounded-xl bg-zinc-950 border border-zinc-800 text-[11px] text-zinc-300 space-y-1">
         <div class="font-semibold text-amber-400">Как получить токен:</div>
         <div>1. Откройте <a href="https://www.discogs.com/settings/developers" target="_blank" class="underline text-sky-400">discogs.com/settings/developers</a></div>
@@ -426,7 +426,6 @@ body { background-color: #09090b; color: #f4f4f5; font-family: 'Inter', sans-ser
 </nav>
 
 <script>
-const USD_TO_RUB_RATE = 95;
 const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
 
 function getOrCreateDeviceOwnerKey() {
@@ -656,19 +655,23 @@ function setMarketViewMode(mode) {
   marketViewMode = mode;
   const listBtn = document.getElementById('modeListingsBtn');
   const relBtn = document.getElementById('modeReleasesBtn');
+  const searchInput = document.getElementById('globalSearchInput');
   if (mode === 'listings') {
     listBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black shadow flex items-center justify-center gap-1.5';
     relBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white flex items-center justify-center gap-1.5';
+    searchInput.placeholder = 'Артист, альбом, кат. номер или ID релиза...';
   } else {
     relBtn.className = 'py-2 text-xs font-semibold rounded-lg bg-amber-500 text-black shadow flex items-center justify-center gap-1.5';
     listBtn.className = 'py-2 text-xs font-semibold rounded-lg text-zinc-400 hover:text-white flex items-center justify-center gap-1.5';
+    searchInput.placeholder = 'Только ID релиза Discogs (напр. 249504 или [r249504])...';
   }
   renderCurrentMarketView();
 }
 
+// Распознавание только числового ID релиза Discogs (например: 249504 или [r249504])
 function extractDiscogsNumericId(raw) {
   if (!raw) return null;
-  const m = raw.trim().match(/^\[?r?(\d{3,12})\]?$/i);
+  const m = raw.trim().match(/^\[?r?(\d{1,12})\]?$/i);
   return m ? m[1] : null;
 }
 
@@ -684,104 +687,26 @@ function clearSearch() {
   handleSearchInput('');
 }
 
-function getReleaseEffectivePrice(rel) {
-  if (!rel) return 0;
+// Возвращает ТОЛЬКО реальную минимальную цену из активных объявлений продавцов (без выдуманных цен)
+function getReleaseRealMarketPrice(rel) {
+  if (!rel) return null;
   const lots = listingsDB.filter(l => String(l.discogsId) === String(rel.discogsId));
-  if (lots.length > 0) return Math.min(...lots.map(l => Number(l.price)));
-  if (rel.estimatedPriceRub && Number(rel.estimatedPriceRub) > 0) return Number(rel.estimatedPriceRub);
-  const numId = parseInt(String(rel.discogsId).replace(/\D/g, ''), 10) || 1000;
-  return 1800 + (numId % 45) * 100;
+  return lots.length > 0 ? Math.min(...lots.map(l => Number(l.price))) : null;
 }
 
-async function enrichReleasesWithDiscogsPrices(releaseIds) {
-  const subset = releaseIds.slice(0, 8);
-  await Promise.allSettled(subset.map(async (idStr) => {
-    const target = releasesDB.find(r => r.discogsId === String(idStr));
-    if (!target || target.priceChecked) return;
-    try {
-      const res = await fetch(`https://api.discogs.com/releases/${idStr}`, { headers: getDiscogsHeaders() });
-      if (!res.ok) return;
-      const data = await res.json();
-      target.priceChecked = true;
-      if (typeof data.lowest_price === 'number' && data.lowest_price > 0) {
-        target.estimatedPriceRub = Math.max(600, Math.round((data.lowest_price * USD_TO_RUB_RATE) / 50) * 50);
-      }
-    } catch (e) {}
-  }));
-  saveState();
-  if (currentTab === 'market' && marketViewMode === 'releases') renderCurrentMarketView();
-}
-
+// Поиск в базу Discogs работает ТОЛЬКО по ID релиза
 async function executeDiscogsSearch() {
   const q = document.getElementById('globalSearchInput').value.trim();
   if (!q) {
-    showToast('Введите название пластинки, кат. номер или ID релиза');
+    showToast('Введите числовой ID релиза Discogs (например: 249504)');
     return;
   }
   const releaseId = extractDiscogsNumericId(q);
-  if (releaseId) {
-    await fetchSingleReleaseFromDiscogs(releaseId, true);
+  if (!releaseId) {
+    showToast('Поиск по каталогу Discogs работает только по ID релиза (например: 249504)', 'fa-solid fa-circle-info text-amber-400');
     return;
   }
-  if (!discogsToken) {
-    openTokenModal();
-    showToast('Введите ваш Discogs API Токен для поиска', 'fa-solid fa-key text-amber-400');
-    return;
-  }
-
-  const loader = document.getElementById('searchLoadingState');
-  loader.classList.remove('hidden');
-
-  try {
-    const url = `https://api.discogs.com/database/search?q=${encodeURIComponent(q)}&type=release&per_page=15`;
-    const response = await fetch(url, { headers: getDiscogsHeaders() });
-    if (!response.ok) throw new Error('API Error');
-    const data = await response.json();
-
-    if (!data.results || data.results.length === 0) {
-      showToast('В базе Discogs ничего не найдено');
-      return;
-    }
-
-    const newIds = [];
-    data.results.forEach((item, index) => {
-      const idStr = String(item.id);
-      const parts = (item.title || '').split(' - ');
-      const artist = parts.length > 1 ? parts[0].trim() : 'Исполнитель';
-      const title = parts.length > 1 ? parts.slice(1).join(' - ').trim() : (item.title || 'Без названия');
-      const fallbackEst = 1800 + ((parseInt(idStr, 10) || 1000) % 45) * 100;
-
-      const mapped = {
-        discogsId: idStr, artist, title,
-        label: (item.label && item.label[0]) ? item.label[0] : 'Не указан',
-        catno: item.catno || 'Не указан',
-        country: item.country || 'Не указана',
-        year: item.year ? parseInt(item.year, 10) : '—',
-        styles: item.style || item.genre || [],
-        format: item.format ? item.format.join(', ') : 'Vinyl, LP',
-        matrix: 'Откройте карточку для просмотра деталей',
-        cover: item.cover_image || item.thumb || `https://placehold.co/400x400/18181b/f59e0b?text=${encodeURIComponent(title)}`,
-        tracklist: [],
-        estimatedPriceRub: fallbackEst,
-        priceChecked: false,
-        fullLoaded: false,
-        addedAt: Date.now() - index
-      };
-
-      if (!releasesDB.some(r => r.discogsId === idStr)) releasesDB.unshift(mapped);
-      newIds.push(idStr);
-    });
-
-    saveState();
-    setMarketViewMode('releases');
-    showToast(`Найдено релизов: ${data.results.length}`);
-    enrichReleasesWithDiscogsPrices(newIds);
-  } catch (err) {
-    showToast('Ошибка Discogs API. Проверьте токен.', 'fa-solid fa-triangle-exclamation text-rose-400');
-  } finally {
-    loader.classList.add('hidden');
-    renderCurrentMarketView();
-  }
+  await fetchSingleReleaseFromDiscogs(releaseId, true);
 }
 
 async function fetchSingleReleaseFromDiscogs(discogsId, openModalAfter = false) {
@@ -794,10 +719,6 @@ async function fetchSingleReleaseFromDiscogs(discogsId, openModalAfter = false) 
 
     const artistName = data.artists ? data.artists.map(a => a.name.replace(/\s*\(\d+\)$/, '')).join(', ') : 'Исполнитель';
     const labelInfo = (data.labels && data.labels[0]) ? data.labels[0] : { name: 'Не указан', catno: 'Не указан' };
-    const fallbackEst = 1800 + ((parseInt(String(data.id), 10) || 1000) % 45) * 100;
-    const estRub = (typeof data.lowest_price === 'number' && data.lowest_price > 0)
-      ? Math.max(600, Math.round((data.lowest_price * USD_TO_RUB_RATE) / 50) * 50)
-      : fallbackEst;
 
     const fullRelease = {
       discogsId: String(data.id),
@@ -816,22 +737,21 @@ async function fetchSingleReleaseFromDiscogs(discogsId, openModalAfter = false) 
         ? data.images[0].uri
         : `https://placehold.co/400x400/18181b/f59e0b?text=${encodeURIComponent(artistName)}`,
       tracklist: (data.tracklist || []).map(t => ({ pos: t.position || '-', title: t.title, duration: t.duration || '—' })),
-      estimatedPriceRub: estRub,
-      priceChecked: true,
       fullLoaded: true,
       addedAt: Date.now()
     };
 
-    const idx = releasesDB.findIndex(r => r.discogsId === fullRelease.discogsId);
+    const idx = releasesDB.findIndex(r => String(r.discogsId) === fullRelease.discogsId);
     if (idx > -1) releasesDB[idx] = { ...releasesDB[idx], ...fullRelease };
     else releasesDB.unshift(fullRelease);
 
     saveState();
+    setMarketViewMode('releases');
     renderCurrentMarketView();
     if (openModalAfter) openReleaseModal(fullRelease.discogsId);
     return fullRelease;
   } catch (err) {
-    showToast('Не удалось загрузить релиз из Discogs', 'fa-solid fa-triangle-exclamation text-rose-400');
+    showToast(`Релиз с ID #${discogsId} не найден в Discogs`, 'fa-solid fa-triangle-exclamation text-rose-400');
     return null;
   } finally {
     loader.classList.add('hidden');
@@ -883,7 +803,8 @@ function renderCurrentMarketView() {
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3"><div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl"><i class="fa-solid fa-record-vinyl"></i></div><h3 class="text-sm font-bold text-white">В продаже пока нет подходящих пластинок</h3><p class="text-xs text-zinc-400 max-w-sm mx-auto">Найдите пластинку через поиск Discogs сверху, измените фильтры или выставите свой винил на продажу.</p><div class="flex flex-wrap justify-center gap-2 pt-1"><button type="button" onclick="switchTab('sell')" class="px-4 py-2 rounded-xl bg-amber-500 text-xs font-bold text-black">Выставить пластинку</button>${searchQuery ? `<button type="button" onclick="executeDiscogsSearch()" class="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-amber-400 border border-amber-500/30">Искать «${escapeHtml(searchQuery)}» в Discogs</button>` : ''}</div></div>`;
+      const numericId = extractDiscogsNumericId(searchQuery);
+      container.innerHTML = `<div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3"><div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl"><i class="fa-solid fa-record-vinyl"></i></div><h3 class="text-sm font-bold text-white">В продаже пока нет подходящих пластинок</h3><p class="text-xs text-zinc-400 max-w-sm mx-auto">Вы можете найти релиз в каталоге Discogs по его числовому ID или выставить свой винил на продажу.</p><div class="flex flex-wrap justify-center gap-2 pt-1"><button type="button" onclick="switchTab('sell')" class="px-4 py-2 rounded-xl bg-amber-500 text-xs font-bold text-black">Выставить пластинку</button>${numericId ? `<button type="button" onclick="executeDiscogsSearch()" class="px-4 py-2 rounded-xl bg-zinc-800 text-xs font-semibold text-amber-400 border border-amber-500/30">Загрузить ID #${escapeHtml(numericId)} из Discogs</button>` : ''}</div></div>`;
       return;
     }
 
@@ -892,15 +813,19 @@ function renderCurrentMarketView() {
       return `<article class="p-3.5 rounded-2xl bg-zinc-900/95 border border-zinc-800/90 hover:border-zinc-700 transition space-y-3"><div class="flex gap-3.5"><div onclick="openReleaseModal('${escapeHtml(lot.discogsId)}')" class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-zinc-950 border border-zinc-800 shrink-0 cursor-pointer"><img src="${escapeHtml(lot.cover)}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><div onclick="openReleaseModal('${escapeHtml(lot.discogsId)}')" class="cursor-pointer truncate"><h3 class="text-sm font-bold text-white truncate hover:text-amber-400">${escapeHtml(lot.artist)} — ${escapeHtml(lot.title)}</h3><p class="text-[11px] text-zinc-400 truncate">${escapeHtml(lot.label)} • <span class="font-mono text-zinc-300">${escapeHtml(lot.catno)}</span> • ${escapeHtml(lot.year)}</p></div><div class="text-right shrink-0"><div class="text-base font-extrabold font-mono text-amber-400">${Number(lot.price).toLocaleString('ru-RU')} ₽</div><div class="text-[10px] text-zinc-500">${escapeHtml(lot.city)}</div></div></div><div class="flex flex-wrap items-center gap-1.5 mt-2"><span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-semibold border ${getGradeBadgeClass(lot.mediaCond)}">Винил: ${escapeHtml(lot.mediaCond)}</span><span class="px-2 py-0.5 rounded-md text-[11px] font-mono border bg-zinc-800/90 text-zinc-300 border-zinc-700">Конверт: ${escapeHtml(lot.sleeveCond)}</span><span class="px-2 py-0.5 rounded-md text-[10px] bg-zinc-950 text-zinc-400 border border-zinc-800">${escapeHtml(lot.pressType)}</span>${lot.insert ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-amber-500/15 text-amber-300 border border-amber-500/30">Вкладка</span>` : ''}${lot.obi ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-rose-500/15 text-rose-300 border border-rose-500/30">OBI</span>` : ''}${lot.sealed ? `<span class="px-1.5 py-0.5 rounded text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">Sealed</span>` : ''}</div><p class="text-xs text-zinc-300 mt-2 line-clamp-2 bg-zinc-950/60 px-2.5 py-1.5 rounded-lg border border-zinc-800/80">${escapeHtml(lot.comment)}</p></div></div><div class="pt-2.5 border-t border-zinc-800/80 flex items-center justify-between gap-2"><div class="flex items-center gap-2 min-w-0"><div class="w-7 h-7 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-amber-400 text-xs shrink-0"><i class="fa-solid fa-location-dot"></i></div><div class="text-[11px] text-zinc-400 truncate">${escapeHtml(lot.city)} • ${escapeHtml(lot.shipping)}</div></div><div class="flex items-center gap-1.5 shrink-0"><button type="button" onclick="openReleaseModal('${escapeHtml(lot.discogsId)}')" class="px-2.5 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-medium">О релизе</button>${mine ? `<button type="button" onclick="deleteOwnListing('${escapeHtml(lot.id)}')" class="px-3 py-2 rounded-xl bg-rose-500/15 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center gap-1.5"><i class="fa-solid fa-trash-can"></i><span>Снять</span></button>` : `<button type="button" onclick="openContactSellerModal('${escapeHtml(lot.id)}')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs flex items-center gap-1.5"><i class="fa-brands fa-telegram text-sm"></i><span>Купить</span></button>`}</div></div></article>`;
     }).join('');
   } else {
+    // КАТАЛОГ DISCOGS: поиск и фильтрация строго по ID релиза, без выдуманных цен
+    const searchedId = extractDiscogsNumericId(searchQuery);
+    if (searchQuery && !searchedId) {
+      container.innerHTML = `<div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3"><div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl"><i class="fa-solid fa-hashtag"></i></div><h3 class="text-sm font-bold text-white">Поиск в каталоге Discogs работает только по ID релиза</h3><p class="text-xs text-zinc-400 max-w-sm mx-auto">Введите числовой ID релиза Discogs (например: <span class="font-mono text-amber-400">249504</span> или <span class="font-mono text-amber-400">[r249504]</span>) и нажмите кнопку «По ID».</p></div>`;
+      return;
+    }
+
     let filteredReleases = releasesDB.filter(r => {
-      if (q) {
-        const hay = `${r.artist} ${r.title} ${r.label} ${r.catno} ${r.discogsId} ${r.country}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
+      if (searchedId && !String(r.discogsId).includes(searchedId)) return false;
       if (activeFilters.minYear && (Number(r.year) || 0) < activeFilters.minYear) return false;
-      const effPrice = getReleaseEffectivePrice(r);
-      if (activeFilters.minPrice !== null && effPrice < activeFilters.minPrice) return false;
-      if (activeFilters.maxPrice !== null && effPrice > activeFilters.maxPrice) return false;
+      const realPrice = getReleaseRealMarketPrice(r);
+      if (activeFilters.minPrice !== null && (realPrice === null || realPrice < activeFilters.minPrice)) return false;
+      if (activeFilters.maxPrice !== null && (realPrice === null || realPrice > activeFilters.maxPrice)) return false;
       return true;
     });
 
@@ -910,27 +835,40 @@ function renderCurrentMarketView() {
     };
 
     filteredReleases.sort((a, b) => {
-      if (sortBy === 'price_asc') return getReleaseEffectivePrice(a) - getReleaseEffectivePrice(b);
-      if (sortBy === 'price_desc') return getReleaseEffectivePrice(b) - getReleaseEffectivePrice(a);
+      if (sortBy === 'price_asc') {
+        const pa = getReleaseRealMarketPrice(a);
+        const pb = getReleaseRealMarketPrice(b);
+        if (pa === null && pb === null) return (b.addedAt || 0) - (a.addedAt || 0);
+        if (pa === null) return 1;
+        if (pb === null) return -1;
+        return pa - pb;
+      }
+      if (sortBy === 'price_desc') {
+        const pa = getReleaseRealMarketPrice(a);
+        const pb = getReleaseRealMarketPrice(b);
+        if (pa === null && pb === null) return (b.addedAt || 0) - (a.addedAt || 0);
+        if (pa === null) return 1;
+        if (pb === null) return -1;
+        return pb - pa;
+      }
       if (sortBy === 'condition') return getReleaseBestCond(b.discogsId) - getReleaseBestCond(a.discogsId);
       if (sortBy === 'year_asc') return (parseInt(a.year, 10) || 9999) - (parseInt(b.year, 10) || 9999);
       return (b.addedAt || 0) - (a.addedAt || 0);
     });
 
     if (filteredReleases.length === 0) {
-      container.innerHTML = `<div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3"><div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl"><i class="fa-solid fa-magnifying-glass"></i></div><h3 class="text-sm font-bold text-white">Каталог релизов пуст</h3><p class="text-xs text-zinc-400 max-w-sm mx-auto">Введите название альбома, артиста или код релиза в строку поиска выше и нажмите «Найти».</p></div>`;
+      container.innerHTML = `<div class="p-8 rounded-3xl bg-zinc-900/70 border border-zinc-800 text-center space-y-3"><div class="w-12 h-12 rounded-2xl bg-zinc-800 text-amber-400 mx-auto flex items-center justify-center text-xl"><i class="fa-solid fa-compact-disc"></i></div><h3 class="text-sm font-bold text-white">${searchedId ? `Релиз #${escapeHtml(searchedId)} ещё не загружен` : 'Каталог релизов пуст'}</h3><p class="text-xs text-zinc-400 max-w-sm mx-auto">Введите ID релиза Discogs (например: 249504) в строку поиска выше и нажмите «По ID».</p>${searchedId ? `<button type="button" onclick="executeDiscogsSearch()" class="px-4 py-2 rounded-xl bg-amber-500 text-black font-bold text-xs">Загрузить релиз #${escapeHtml(searchedId)} из Discogs</button>` : ''}</div>`;
       return;
     }
 
     container.innerHTML = filteredReleases.map(rel => {
       const activeLots = listingsDB.filter(l => String(l.discogsId) === String(rel.discogsId));
-      const lotMinPrice = activeLots.length > 0 ? Math.min(...activeLots.map(l => Number(l.price))) : null;
-      const effectivePrice = getReleaseEffectivePrice(rel);
-      const priceBadgeHtml = lotMinPrice !== null
-        ? `<span class="text-emerald-400 font-semibold">В продаже: ${activeLots.length} шт. • от ${lotMinPrice.toLocaleString('ru-RU')} ₽</span>`
-        : `<span class="text-amber-400 font-semibold">Оценка Discogs: ~${effectivePrice.toLocaleString('ru-RU')} ₽</span>`;
+      const realPrice = getReleaseRealMarketPrice(rel);
+      const priceBadgeHtml = realPrice !== null
+        ? `<span class="text-emerald-400 font-semibold">В продаже: ${activeLots.length} шт. • от ${realPrice.toLocaleString('ru-RU')} ₽</span>`
+        : `<span class="text-zinc-500">Нет в продаже</span>`;
 
-      return `<div onclick="openReleaseModal('${escapeHtml(rel.discogsId)}')" class="p-3.5 rounded-2xl bg-zinc-900/95 border border-zinc-800 hover:border-amber-500/50 transition cursor-pointer flex items-center gap-3.5"><img src="${escapeHtml(rel.cover)}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-20 h-20 rounded-xl object-cover border border-zinc-700 shrink-0"><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-1.5"><div class="flex items-center gap-1.5"><span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700">#${escapeHtml(rel.discogsId)}</span><span class="text-[11px] text-zinc-400">${escapeHtml(rel.country)} • ${escapeHtml(rel.year)}</span></div><span class="font-mono text-xs font-extrabold text-amber-400 shrink-0">${effectivePrice.toLocaleString('ru-RU')} ₽</span></div><h3 class="text-sm font-bold text-white truncate mt-1">${escapeHtml(rel.artist)} — ${escapeHtml(rel.title)}</h3><p class="text-xs text-zinc-400 truncate">${escapeHtml(rel.label)} (${escapeHtml(rel.catno)}) • ${escapeHtml(rel.format)}</p><div class="flex items-center justify-between mt-2 pt-1.5 border-t border-zinc-800/80"><span class="text-[11px]">${priceBadgeHtml}</span><span class="text-xs text-amber-400 font-semibold flex items-center gap-1 shrink-0"><span>Открыть</span><i class="fa-solid fa-chevron-right text-[10px]"></i></span></div></div></div>`;
+      return `<div onclick="openReleaseModal('${escapeHtml(rel.discogsId)}')" class="p-3.5 rounded-2xl bg-zinc-900/95 border border-zinc-800 hover:border-amber-500/50 transition cursor-pointer flex items-center gap-3.5"><img src="${escapeHtml(rel.cover)}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-20 h-20 rounded-xl object-cover border border-zinc-700 shrink-0"><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-1.5"><div class="flex items-center gap-1.5"><span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-zinc-800 text-amber-400 border border-zinc-700">ID #${escapeHtml(rel.discogsId)}</span><span class="text-[11px] text-zinc-400">${escapeHtml(rel.country)} • ${escapeHtml(rel.year)}</span></div>${realPrice !== null ? `<span class="font-mono text-xs font-extrabold text-amber-400 shrink-0">от ${realPrice.toLocaleString('ru-RU')} ₽</span>` : ''}</div><h3 class="text-sm font-bold text-white truncate mt-1">${escapeHtml(rel.artist)} — ${escapeHtml(rel.title)}</h3><p class="text-xs text-zinc-400 truncate">${escapeHtml(rel.label)} (${escapeHtml(rel.catno)}) • ${escapeHtml(rel.format)}</p><div class="flex items-center justify-between mt-2 pt-1.5 border-t border-zinc-800/80"><span class="text-[11px]">${priceBadgeHtml}</span><span class="text-xs text-amber-400 font-semibold flex items-center gap-1 shrink-0"><span>Открыть</span><i class="fa-solid fa-chevron-right text-[10px]"></i></span></div></div></div>`;
     }).join('');
   }
 }
@@ -950,7 +888,7 @@ async function openReleaseModal(discogsId) {
   const matchingLots = listingsDB.filter(l => String(l.discogsId) === String(rel.discogsId));
   const inHave = userCollection.some(c => c.discogsId === rel.discogsId && c.type === 'have');
   const inWant = userCollection.some(c => c.discogsId === rel.discogsId && c.type === 'want');
-  const effectivePrice = getReleaseEffectivePrice(rel);
+  const realPrice = getReleaseRealMarketPrice(rel);
 
   document.getElementById('releaseModalBody').innerHTML = `
     <div class="flex flex-col sm:flex-row gap-4 items-center sm:items-start">
@@ -965,7 +903,7 @@ async function openReleaseModal(discogsId) {
           <div><span class="text-zinc-500">Лейбл:</span> ${escapeHtml(rel.label)} — <span class="font-mono text-amber-400">${escapeHtml(rel.catno)}</span></div>
           <div><span class="text-zinc-500">Формат:</span> ${escapeHtml(rel.format)}</div>
           <div><span class="text-zinc-500">Матрица:</span> <span class="font-mono text-[11px] text-zinc-400">${escapeHtml(rel.matrix)}</span></div>
-          <div><span class="text-zinc-500">Ориентир цены:</span> <span class="font-mono font-bold text-amber-400">~${effectivePrice.toLocaleString('ru-RU')} ₽</span></div>
+          ${realPrice !== null ? `<div><span class="text-zinc-500">Цена в продаже:</span> <span class="font-mono font-bold text-emerald-400">от ${realPrice.toLocaleString('ru-RU')} ₽</span></div>` : ''}
         </div>
         <div class="flex flex-wrap justify-center sm:justify-start gap-2 pt-2">
           <button type="button" onclick="toggleCollectionItem('${escapeHtml(rel.discogsId)}', 'have')" class="px-3 py-1.5 rounded-xl text-xs font-semibold border ${inHave ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-zinc-800 text-zinc-300 border-zinc-700'}"><i class="fa-solid ${inHave ? 'fa-check' : 'fa-record-vinyl'} mr-1"></i>${inHave ? 'В коллекции' : 'В коллекцию'}</button>
@@ -1060,10 +998,12 @@ function openDirectTelegramChatWithSeller() {
   else window.open(tgUrl, '_blank');
 }
 
+// Автозаполнение в форме продажи также работает строго по ID релиза Discogs
 async function autofillSellFormFromDiscogs() {
   const query = document.getElementById('sellDiscogsLookupInput').value.trim();
-  if (!query) {
-    showToast('Введите ID релиза или название');
+  const numericId = extractDiscogsNumericId(query);
+  if (!numericId) {
+    showToast('Введите числовой ID релиза Discogs (например: 249504)', 'fa-solid fa-circle-info text-amber-400');
     return;
   }
   const btn = document.getElementById('sellAutofillBtn');
@@ -1071,27 +1011,10 @@ async function autofillSellFormFromDiscogs() {
   btn.textContent = 'Загрузка...';
 
   try {
-    const numericId = extractDiscogsNumericId(query);
-    let found = null;
-    if (numericId) {
-      found = await fetchSingleReleaseFromDiscogs(numericId, false);
-    } else {
-      if (!discogsToken) {
-        openTokenModal();
-        showToast('Введите ваш Discogs API Токен');
-        return;
-      }
-      const res = await fetch(`https://api.discogs.com/database/search?q=${encodeURIComponent(query)}&type=release&per_page=1`, { headers: getDiscogsHeaders() });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.results && data.results.length > 0) found = await fetchSingleReleaseFromDiscogs(String(data.results[0].id), false);
-      }
-    }
+    const found = await fetchSingleReleaseFromDiscogs(numericId, false);
     if (found) {
       fillSellFormFields(found);
-      showToast(`Данные «${found.artist} — ${found.title}» заполнены!`);
-    } else {
-      showToast('Релиз не найден');
+      showToast(`Данные релиза #${found.discogsId} заполнены!`);
     }
   } finally {
     btn.disabled = false;
@@ -1118,7 +1041,6 @@ function fillSellFormFields(rel) {
   document.getElementById('sellCountry').value = rel.country || '';
   document.getElementById('sellCoverUrl').value = rel.cover || '';
   document.getElementById('sellPreviewCover').src = rel.cover || 'https://placehold.co/300x300/18181b/f59e0b?text=VINYL';
-  if (rel.estimatedPriceRub && !document.getElementById('sellPrice').value) document.getElementById('sellPrice').value = rel.estimatedPriceRub;
 }
 
 function submitVinylListing(e) {
@@ -1159,7 +1081,7 @@ function submitVinylListing(e) {
     releasesDB.unshift({
       discogsId, artist, title, label, catno, country, year,
       styles: [pressType], format: 'LP, Album', matrix: catno, cover,
-      tracklist: [], estimatedPriceRub: priceVal, priceChecked: true, fullLoaded: false, addedAt: Date.now()
+      tracklist: [], fullLoaded: false, addedAt: Date.now()
     });
   }
 
@@ -1241,14 +1163,14 @@ function renderCollectionView() {
   const list = userCollection.filter(c => c.type === collectionSubTab);
   const container = document.getElementById('collectionListContainer');
   if (list.length === 0) {
-    container.innerHTML = `<div class="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 text-center text-xs text-zinc-400">Список пока пуст. Найдите пластинки через поиск Discogs и добавьте их в коллекцию.</div>`;
+    container.innerHTML = `<div class="p-8 rounded-2xl bg-zinc-900 border border-zinc-800 text-center text-xs text-zinc-400">Список пока пуст. Загрузите нужные пластинки по ID релиза Discogs и добавьте их в коллекцию.</div>`;
     return;
   }
   container.innerHTML = list.map(entry => {
     const rel = releasesDB.find(r => r.discogsId === entry.discogsId);
     if (!rel) return '';
-    const effPrice = getReleaseEffectivePrice(rel);
-    return `<div class="p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3"><div onclick="openReleaseModal('${escapeHtml(rel.discogsId)}')" class="flex items-center gap-3 min-w-0 cursor-pointer"><img src="${escapeHtml(rel.cover)}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-16 h-16 rounded-xl object-cover border border-zinc-700 shrink-0"><div class="min-w-0"><span class="text-[10px] font-mono text-amber-400">#${escapeHtml(rel.discogsId)} • ${escapeHtml(rel.year)}</span><h4 class="text-sm font-bold text-white truncate">${escapeHtml(rel.artist)} — ${escapeHtml(rel.title)}</h4><p class="text-xs text-emerald-400">~${effPrice.toLocaleString('ru-RU')} ₽</p></div></div><button type="button" onclick="toggleCollectionItem('${escapeHtml(rel.discogsId)}', '${escapeHtml(entry.type)}')" class="p-2.5 rounded-xl bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button></div>`;
+    const realPrice = getReleaseRealMarketPrice(rel);
+    return `<div class="p-3.5 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-between gap-3"><div onclick="openReleaseModal('${escapeHtml(rel.discogsId)}')" class="flex items-center gap-3 min-w-0 cursor-pointer"><img src="${escapeHtml(rel.cover)}" onerror="this.src='https://placehold.co/300x300/18181b/f59e0b?text=VINYL'" class="w-16 h-16 rounded-xl object-cover border border-zinc-700 shrink-0"><div class="min-w-0"><span class="text-[10px] font-mono text-amber-400">ID #${escapeHtml(rel.discogsId)} • ${escapeHtml(rel.year)}</span><h4 class="text-sm font-bold text-white truncate">${escapeHtml(rel.artist)} — ${escapeHtml(rel.title)}</h4><p class="text-xs ${realPrice !== null ? 'text-emerald-400' : 'text-zinc-500'}">${realPrice !== null ? `В продаже от ${realPrice.toLocaleString('ru-RU')} ₽` : 'Нет в продаже'}</p></div></div><button type="button" onclick="toggleCollectionItem('${escapeHtml(rel.discogsId)}', '${escapeHtml(entry.type)}')" class="p-2.5 rounded-xl bg-zinc-800 hover:bg-rose-500/20 text-zinc-400 hover:text-rose-400 text-xs"><i class="fa-solid fa-trash-can"></i></button></div>`;
   }).join('');
 }
 
@@ -1336,7 +1258,7 @@ function updateBadges() {
   fBadge.classList.toggle('hidden', fCount === 0);
   document.getElementById('activeFilterSummary').textContent = fCount > 0
     ? `Активно фильтров: ${fCount}`
-    : (searchQuery ? `Поиск: «${searchQuery}»` : (marketViewMode === 'listings' ? 'Актуальные объявления продавцов' : 'Каталог релизов Discogs'));
+    : (searchQuery ? `Поиск: «${searchQuery}»` : (marketViewMode === 'listings' ? 'Актуальные объявления продавцов' : 'Поиск в каталоге Discogs по ID релиза'));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
